@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\BackOffice;
 
 use App\Entity\Car;
 use App\Form\CarType;
@@ -16,7 +16,7 @@ class CarController extends AbstractController
     #[Route('/', name: 'app_car_index', methods: ['GET'])]
     public function index(CarRepository $carRepository): Response
     {
-        return $this->render('car/index.html.twig', [
+        return $this->render('back_office/car/index.html.twig', [
             'cars' => $carRepository->findAll(),
         ]);
     }
@@ -34,7 +34,7 @@ class CarController extends AbstractController
             return $this->redirectToRoute('app_car_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->renderForm('car/new.html.twig', [
+        return $this->renderForm('back_office/car/new.html.twig', [
             'car' => $car,
             'form' => $form,
         ]);
@@ -43,7 +43,7 @@ class CarController extends AbstractController
     #[Route('/{id}', name: 'app_car_show', methods: ['GET'])]
     public function show(Car $car): Response
     {
-        return $this->render('car/show.html.twig', [
+        return $this->render('back_office/car/show.html.twig', [
             'car' => $car,
         ]);
     }
@@ -60,7 +60,7 @@ class CarController extends AbstractController
             return $this->redirectToRoute('app_car_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->renderForm('car/edit.html.twig', [
+        return $this->renderForm('back_office/car/edit.html.twig', [
             'car' => $car,
             'form' => $form,
         ]);

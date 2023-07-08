@@ -5,6 +5,12 @@
 {% block body %}
     <h1>Car index</h1>
 
+<ul>
+  {% for item in app.user %}
+    <li>{{ item }}</li>
+  {% endfor %}
+</ul>
+
     <table class="table">
         <thead>
             <tr>

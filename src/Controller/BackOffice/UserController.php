@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\BackOffice;
 
 use App\Entity\User;
 use App\Form\UserType;
@@ -10,13 +10,14 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[Route('/user')]
+#[Route('back-office/admin/user')]
 class UserController extends AbstractController
 {
     #[Route('/', name: 'app_user_index', methods: ['GET'])]
     public function index(UserRepository $userRepository): Response
-    {
-        return $this->render('user/index.html.twig', [
+    {   
+        // dd($user = $this->getUser());
+        return $this->render('back_office/user/index.html.twig', [
             'users' => $userRepository->findAll(),
         ]);
     }
@@ -34,7 +35,7 @@ class UserController extends AbstractController
             return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->renderForm('user/new.html.twig', [
+        return $this->renderForm('back_office/user/new.html.twig', [
             'user' => $user,
             'form' => $form,
         ]);
@@ -43,7 +44,7 @@ class UserController extends AbstractController
     #[Route('/{id}', name: 'app_user_show', methods: ['GET'])]
     public function show(User $user): Response
     {
-        return $this->render('user/show.html.twig', [
+        return $this->render('back_office/user/show.html.twig', [
             'user' => $user,
         ]);
     }
@@ -60,7 +61,7 @@ class UserController extends AbstractController
             return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->renderForm('user/edit.html.twig', [
+        return $this->renderForm('back_office/user/edit.html.twig', [
             'user' => $user,
             'form' => $form,
         ]);
