@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[Route('/car')]
+#[Route('/back-office/car')]
 class CarController extends AbstractController
 {
     #[Route('/', name: 'app_car_index', methods: ['GET'])]
