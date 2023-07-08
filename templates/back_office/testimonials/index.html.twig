@@ -1,0 +1,45 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Testimonials index{% endblock %}
+
+{% block body %}
+    <h1>Testimonials index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Surname</th>
+                <th>Message</th>
+                <th>Note</th>
+                <th>Pending_verification</th>
+                <th>Is_validated</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for testimonial in testimonials %}
+            <tr>
+                <td>{{ testimonial.id }}</td>
+                <td>{{ testimonial.name }}</td>
+                <td>{{ testimonial.surname }}</td>
+                <td>{{ testimonial.message }}</td>
+                <td>{{ testimonial.note }}</td>
+                <td>{{ testimonial.pendingVerification ? 'Yes' : 'No' }}</td>
+                <td>{{ testimonial.isValidated ? 'Yes' : 'No' }}</td>
+                <td>
+                    <a href="{{ path('app_testimonials_show', {'id': testimonial.id}) }}">show</a>
+                    <a href="{{ path('app_testimonials_edit', {'id': testimonial.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="8">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_testimonials_new') }}">Create new</a>
+{% endblock %}
