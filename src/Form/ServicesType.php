@@ -3,9 +3,11 @@
 namespace App\Form;
 
 use App\Entity\Services;
+use Symfony\Component\Validator\Constraints\File;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 
 class ServicesType extends AbstractType
 {
@@ -14,7 +16,23 @@ class ServicesType extends AbstractType
         $builder
             ->add('name')
             ->add('description')
-            ->add('picture_src')
+            ->add('picture_src',FileType::class, [
+                'label'=> 'Fichier Image',
+                'mapped'=> false,
+                'required'=> false,
+                'constraints' =>[
+                    new File ([
+                        'maxSize' => '1024k',
+                        'extensions' =>[
+                            'webp',
+                            'jpeg',
+                            'png'
+                        ],
+                        'mimeTypesMessage' => 'Veuillez Uploader une image au format webp, jpeg ou png.'
+                    ])
+                ],
+
+            ])
         ;
     }
 
