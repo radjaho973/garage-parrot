@@ -12,7 +12,7 @@ use Symfony\Component\String\Slugger\SluggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 
-#[Route('back-office/services')]
+#[Route('back-office/admin/services')]
 class ServicesController extends AbstractController
 {
     #[Route('/', name: 'app_services_index', methods: ['GET'])]

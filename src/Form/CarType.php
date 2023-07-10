@@ -3,13 +3,14 @@
 namespace App\Form;
 
 use App\Entity\Car;
-use App\Entity\ImageCollection;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Validator\Constraints\File;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 class CarType extends AbstractType
 {
@@ -21,23 +22,37 @@ class CarType extends AbstractType
             ->add('yearPlacedInCirculation')
             ->add('mileage')
             ->add('description')
-            ->add('images',FileType::class, [
-                'label'=> 'Fichier Image',
-                'mapped'=> false,
-                'required'=> false,
-                'constraints' =>[
-                    new File ([
-                        'maxSize' => '1024k',
-                        'extensions' =>[
-                            'webp',
-                            'jpeg',
-                            'png'
-                        ],
-                        'mimeTypesMessage' => 'Veuillez Uploader une image au format webp, jpeg ou png.'
-                    ])
-                ],
-
+            // ->add('categorie',TextType::class,[
+            //     'mapped'=> false
+            // ])
+            // ->add('Marque',TextType::class,[
+            //     'mapped'=> false
+            // ])
+            ->add('category', CollectionType::class,[
+                'entry_type'=> CategoryType::class,
+                    'by_reference'=> false,
+                    'allow_add'=> true,
+                    'allow_delete'=> true,
+                    'entry_options' => ['label'=>false],
+                    'prototype'=> true,
             ])
+            ->add('brand', CollectionType::class,[
+                'entry_type'=> BrandType::class,
+                    'by_reference'=> false,
+                    'allow_add'=> true,
+                    'allow_delete'=> true,
+                    'entry_options' => ['label'=>true],
+                    'prototype'=> true,
+            ])
+            ->add('image_collection', CollectionType::class,[
+                'entry_type'=> ImageCollectionType::class,
+                    'by_reference'=> false,
+                    'allow_add'=> true,
+                    'allow_delete'=> true,
+                    'entry_options' => ['label'=>true],
+                    'prototype'=> true,
+            ])
+            
         ;
     }
 

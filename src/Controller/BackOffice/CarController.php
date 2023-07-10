@@ -3,17 +3,19 @@
 namespace App\Controller\BackOffice;
 
 use App\Entity\Car;
-use App\Entity\ImageCollection;
+use App\Entity\Brand;
 use App\Form\CarType;
+use App\Entity\Category;
+use App\Entity\ImageCollection;
 use App\Repository\CarRepository;
-use App\Repository\ImageCollectionRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\File\Exception\FileException;
+use App\Repository\ImageCollectionRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\String\Slugger\SluggerInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
 
 #[Route('/back-office/car')]
 class CarController extends AbstractController
@@ -27,23 +29,32 @@ class CarController extends AbstractController
     }
 
     #[Route('/new', name: 'app_car_new', methods: ['GET', 'POST'])]
-    public function new(ImageCollectionRepository $ImageRepo, Request $request, CarRepository $carRepository, SluggerInterface $slugger): Response
+    public function new(EntityManagerInterface $em, Request $request, CarRepository $carRepository, SluggerInterface $slugger): Response
     {
         $car = new Car();
+
+        // $category1 = new Category();
+        // $category1->setCategory("BMW");
+        // $car->setCategory()->add($category1);
+        // $category2 = new Category();
+        // $category2->setCategory("Nissan");
+        // $car->getCategory()->add($category2);
+
+
         $form = $this->createForm(CarType::class, $car);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             
             $ImageFile = $form->get('images')->getData();
-        //    dd($ImageFile->setClientOriginalName()) ;
+            
             if ($ImageFile) {
                 
                 $CarName = $form->get('name')->getData();
                 $originalFileName = pathinfo($CarName, PATHINFO_FILENAME);
                 // transforme le nom du fichier en slug utilisable
                 $safeFileName = $slugger->slug($originalFileName);
-
+                
                 $newFileName = $safeFileName.'-'.uniqid().'.'.$ImageFile->guessExtension();
                 
                 try{
@@ -57,14 +68,31 @@ class CarController extends AbstractController
                 }
                 // ajout du slug à la table image collection
                 // et liaison avec la voiture enregistré 
-                $imageCollection = new ImageCollection;
+                $imageCollection = new ImageCollection();
                 $imageCollection->setImageUrl($newFileName);
                 $car->addImageCollection($imageCollection);
+                // dd([$imageCollection, $car]);
                 
-                $ImageRepo->save($imageCollection,true);
+                $em->persist($imageCollection);
             }
             
-            $carRepository->save($car, true);
+            // $categoryName = $form->get('categorie')->getData();
+            // // dd($categoryName);
+            // $category = new Category();
+            // $category->setCategory($categoryName);
+            // $car->setCategory($category);
+            
+            // $brandName = $form->get('Marque')->getData();
+            
+            // $brand = new Brand();
+            // $brand->setBrand($brandName);
+            // $car->setBrand($brand);
+            
+            // $em->persist($category);
+            // $em->persist($brand);
+            $em->persist($car);
+            $em->flush();
+            
 
             return $this->redirectToRoute('app_car_index', [], Response::HTTP_SEE_OTHER);
         }

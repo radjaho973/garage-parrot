@@ -21,7 +21,7 @@
                 <td>{{ service.id }}</td>
                 <td>{{ service.name }}</td>
                 <td>{{ service.description }}</td>
-                <td>{{ service.pictureSrc }}</td>
+                <td><img style="width: 50px" src="{{ asset('service_uploads/' ~ service.pictureSrc) }}" alt=""></td>
                 <td>
                     <a href="{{ path('app_services_show', {'id': service.id}) }}">show</a>
                     <a href="{{ path('app_services_edit', {'id': service.id}) }}">edit</a>

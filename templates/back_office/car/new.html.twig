@@ -5,7 +5,34 @@
 {% block body %}
     <h1>Create new Car</h1>
 
-    {{ include('back_office/car/_form.html.twig') }}
+    {{ form_start(form) }}
+        {{ form_row(form.name) }}
+        {{ form_row(form.price) }}
+        {{ form_row(form.yearPlacedInCirculation) }}
+        {{ form_row(form.mileage) }}
+        {{ form_row(form.description) }}
+        {# <button type="button" class="btn btn-primary" id="new_category">+ Catégorie</button>
+        {{ form_row(form.category) }}
+        <button type="button" class="btn btn-primary" id="new_brand">+ Marque</button>
+        {{ form_row(form.brand) }} #}
+        {# <h4>Catégories</h4>
+            <ul>
+                {% for categories in form.category %}
+                    <li>{{ form_row(categories.name) }}</li>
+                {% endfor %}
+            </ul>
+        <h4>Marques</h4>
+            <ul>
+                {% for brands in form.brand %}
+                    <li>{{ form_row(brands.name) }}</li>
+                {% endfor %}
+            </ul> #}
+        
+        <button type="button" class="btn btn-primary" id="new_image">+ Image</button>
+        {{ form_row(form.image_collection) }}
+        <button class="btn">{{ button_label|default('Save') }}</button>
+        {{ form_end(form) }}
 
     <a href="{{ path('app_car_index') }}">back to list</a>
 {% endblock %}
+
