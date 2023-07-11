@@ -15,7 +15,7 @@ class ImageCollectionType extends AbstractType
     {
         $builder->add('images',FileType::class, [
             'label'=> 'Fichier Image',
-            'mapped'=> true,
+            'mapped'=> false,
             'required'=> false,
             'constraints' =>[
                 new File ([

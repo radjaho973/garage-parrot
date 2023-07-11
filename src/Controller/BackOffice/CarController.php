@@ -33,63 +33,59 @@ class CarController extends AbstractController
     {
         $car = new Car();
 
-        // $category1 = new Category();
-        // $category1->setCategory("BMW");
-        // $car->setCategory()->add($category1);
-        // $category2 = new Category();
-        // $category2->setCategory("Nissan");
-        // $car->getCategory()->add($category2);
-
-
         $form = $this->createForm(CarType::class, $car);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            // correspond à CollectionType dans le formulaire
+            $imageCollection = $form->get('image_collection');
             
-            $ImageFile = $form->get('images')->getData();
-            
-            if ($ImageFile) {
+            if ($imageCollection) {
                 
                 $CarName = $form->get('name')->getData();
-                $originalFileName = pathinfo($CarName, PATHINFO_FILENAME);
-                // transforme le nom du fichier en slug utilisable
-                $safeFileName = $slugger->slug($originalFileName);
-                
-                $newFileName = $safeFileName.'-'.uniqid().'.'.$ImageFile->guessExtension();
-                
-                try{
-                    $ImageFile->move(
-                        //services.yaml sous parameters
-                        $this->getParameter('image_directory'),
-                        $newFileName
-                    );
-                }catch (FileException $e){
-                    dd($e);
+                //pour chaque ImageCollectionType dans CollectionType
+                //On récupère le FileType de ImageCollectionType
+                foreach ($imageCollection as $imageInput) {
+                    $uploadedImage = $imageInput->get('images')->getData();
+                    
+                    $originalFileName = pathinfo($CarName, PATHINFO_FILENAME);
+                    // transforme le nom du fichier en slug utilisable
+                    $safeFileName = $slugger->slug($originalFileName);
+                    $newFileName = $safeFileName.'-'.uniqid().'.'.$uploadedImage->guessExtension();
+                    
+                    try{
+                        $uploadedImage->move(
+                            //services.yaml sous parameters
+                            $this->getParameter('image_directory'),
+                            $newFileName
+                        );
+                    }catch (FileException $e){
+                        dd($e);
+                    }
+                    // ajout du slug à la table image collection
+                    // et liaison avec la voiture enregistré 
+                    $imageCollection = new ImageCollection();
+                    $imageCollection->setImageUrl($newFileName);
+                    $car->addImageCollection($imageCollection);
+                    
+                    $em->persist($imageCollection);
                 }
-                // ajout du slug à la table image collection
-                // et liaison avec la voiture enregistré 
-                $imageCollection = new ImageCollection();
-                $imageCollection->setImageUrl($newFileName);
-                $car->addImageCollection($imageCollection);
-                // dd([$imageCollection, $car]);
-                
-                $em->persist($imageCollection);
             }
             
-            // $categoryName = $form->get('categorie')->getData();
-            // // dd($categoryName);
-            // $category = new Category();
-            // $category->setCategory($categoryName);
-            // $car->setCategory($category);
+            $categoryName = $form->get('categorie')->getData();
+            // dd($categoryName);
+            $category = new Category();
+            $category->setCategory($categoryName);
+            $car->setCategory($category);
             
-            // $brandName = $form->get('Marque')->getData();
+            $brandName = $form->get('Marque')->getData();
             
-            // $brand = new Brand();
-            // $brand->setBrand($brandName);
-            // $car->setBrand($brand);
+            $brand = new Brand();
+            $brand->setBrand($brandName);
+            $car->setBrand($brand);
             
-            // $em->persist($category);
-            // $em->persist($brand);
+            $em->persist($category);
+            $em->persist($brand);
             $em->persist($car);
             $em->flush();
             
