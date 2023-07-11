@@ -1,0 +1,46 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Testimonials{% endblock %}
+
+{% block body %}
+    <h1>Testimonials</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ testimonial.id }}</td>
+            </tr>
+            <tr>
+                <th>Name</th>
+                <td>{{ testimonial.name }}</td>
+            </tr>
+            <tr>
+                <th>Surname</th>
+                <td>{{ testimonial.surname }}</td>
+            </tr>
+            <tr>
+                <th>Message</th>
+                <td>{{ testimonial.message }}</td>
+            </tr>
+            <tr>
+                <th>Note</th>
+                <td>{{ testimonial.note }}</td>
+            </tr>
+            <tr>
+                <th>Pending_verification</th>
+                <td>{{ testimonial.pendingVerification ? 'Yes' : 'No' }}</td>
+            </tr>
+            <tr>
+                <th>Is_validated</th>
+                <td>{{ testimonial.isValidated ? 'Yes' : 'No' }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_testimonials_index') }}">back to list</a>
+
+    <a href="{{ path('app_testimonials_edit', {'id': testimonial.id}) }}">edit</a>
+
+    {{ include('back_office/testimonials/_delete_form.html.twig') }}
+{% endblock %}
