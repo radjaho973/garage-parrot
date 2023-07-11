@@ -1,0 +1,7 @@
+{
+  "build/app.css": "/build/app.css",
+  "build/app.js": "/build/app.js",
+  "build/runtime.js": "/build/runtime.js",
+  "build/vendors-node_modules_core-js_modules_es_string_replace_js.js": "/build/vendors-node_modules_core-js_modules_es_string_replace_js.js",
+  "build/vendors-node_modules_core-js_modules_es_date_to-string_js-node_modules_core-js_modules_es_err-ad23f2.js": "/build/vendors-node_modules_core-js_modules_es_date_to-string_js-node_modules_core-js_modules_es_err-ad23f2.js"
+}
