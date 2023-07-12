@@ -30,7 +30,7 @@ class Car
     #[ORM\Column(length: 255)]
     private ?string $description = null;
 
-    #[ORM\OneToMany(mappedBy: 'fk_car_id', targetEntity: ImageCollection::class)]
+    #[ORM\OneToMany(mappedBy: 'fk_car_id', targetEntity: ImageCollection::class, fetch:'EAGER')]
     private Collection $imageCollection;
 
     #[ORM\OneToMany(mappedBy: 'fk_car_id', targetEntity: Options::class)]
