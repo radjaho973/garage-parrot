@@ -23,7 +23,9 @@
         height: 276px;
     }
 </style>
-{# {{ form(form) }} #}
+
+ {{ form(form) }}
+<input type="range"/>
 
 <div class="from-wrapper">
     <form>
@@ -82,53 +84,62 @@ let originUrl = window.location.origin
         },
         body:  JSON.stringify({searchQuery:searchForm.value})
     })
-        // console.log(response.text())
-    if (response.ok !== true) {
+    
+    if(response.status == 429){
+        alert('Vous avez effectués trop de requêtes')
+            throw new Error('too many requests')
+        
+    }else if (response.ok !== true) {
             throw new Error(`Impossible de contacter le serveur, status : '${response.status}
             si l\'erreur persiste veuiller vérifier que originUrl(l.72) renvoie bien la bonne url`)
-
-        }else{
+    }else{
             //récupération du contenu json
             let data = await response.json()
             //On éfface les résultat précédent et on affiche les résultat 
             //de la nouvelle requête
-            eraseResult()
             cardsContainer.innerHTML = displayResult(data)
+        }
     }
 
-}
 
+function displayResult(data){
+    eraseResult()
+    let htmlString = ""
+
+    if(data.length == 0){
+        htmlString = `<div class="error-wrapper">
+                        <p>Aucun résultat trouvé<p>
+                    </div>`
+    }else{
+        //pour chaque résultat on crée une carte
+        data.forEach(element => {
+            
+            htmlString += `<div class="card-wrapper">
+                <div class="card-img">
+                    <img src="/car_uploads/${element.imageCollection[0].image_url}" alt="">
+                </div>
+                <div class="card-text">
+                    <div class="card-title">
+                        <p> ${element.name} </p>
+                        <p> ${element.brand.brand} </p>
+                    </div>
+                    <div class="card-info">
+                        <p> ${element.mileage} km </p>
+                        <p> ${element.price} €</p>
+                        <p> ${element.yearPlacedInCirculation} </p>
+                    </div>
+                    <a href="${CarShowUrl.slice(0,-2)}/${element.id}"><button>+</button></a>
+                </div>
+            </div>`
+        });
+    }
+    return htmlString
+} 
 function eraseResult(){
-    //tant que le container à des éléments enfant alors on retire le dernier
+    //tant que le container à des éléments enfants alors on retire le dernier
     while (cardsContainer.firstChild) {
         cardsContainer.removeChild(cardsContainer.lastChild)
     }
 }
-
-function displayResult(data){
-    let htmlString = ""
-    //pour chaque 
-    data.forEach(element => {
-        
-        htmlString += `<div class="card-wrapper">
-            <div class="card-img">
-                <img src="/car_uploads/${element.imageCollection[0].image_url}" alt="">
-            </div>
-            <div class="card-text">
-                <div class="card-title">
-                    <p> ${element.name} </p>
-                    <p> ${element.brand.brand} </p>
-                </div>
-                <div class="card-info">
-                    <p> ${element.mileage} km </p>
-                    <p> ${element.price} €</p>
-                    <p> ${element.yearPlacedInCirculation} </p>
-                </div>
-                <a href="${CarShowUrl.slice(0,-2)}/${element.id}"><button>+</button></a>
-            </div>
-        </div>`
-    });
-    return htmlString
-} 
 </script>
 {% endblock %}

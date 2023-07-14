@@ -3,6 +3,6 @@ framework:
         ajax_request:
             # use 'sliding_window' if you prefer that policy
             policy: 'fixed_window'
-            limit: 1
+            limit: 10
             interval: '1 minutes'
         
