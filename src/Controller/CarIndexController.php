@@ -7,10 +7,11 @@ use App\Repository\CarRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
+use Symfony\Component\RateLimiter\RateLimiterFactory;
 use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class CarIndexController extends AbstractController
 {
@@ -42,12 +43,15 @@ class CarIndexController extends AbstractController
         ]);
     }
     #[Route('/car/index/ajax', name: 'app_car_index_ajax', methods:["POST"])]
-    public function ajax(CarRepository $carRepo,Request $request,SerializerInterface $serializer, NormalizerInterface $normalizer): JsonResponse
+    public function ajax(CarRepository $carRepo,Request $request,RateLimiterFactory $rateLimit, NormalizerInterface $normalizer): JsonResponse
     {
         
         if (!$request->isXmlHttpRequest()) {
             return $this->json('error');
         }else{
+            //ajout d'une limite de requête ajax pour sécuriser l'application
+            $limiter = $rateLimit->create($request->getClientIp());
+            // https://symfony.com/doc/current/rate_limiter.html#rate-limiting-in-action
             //passe les classes à l'intérieur de la fonction pour les
             //utiliser
             function dbQuery($request, CarRepository $carRepo){
@@ -61,8 +65,8 @@ class CarIndexController extends AbstractController
             // Rqresult est un tableau avec les résultats de la recherche
             $Rqresult = dbQuery($request,$carRepo);
             // options 'groups' défini dans les entités
-            // Car;Category;ImageCollection & Brand afin de dire à
-            //normalizer quel données encodé en format Json afin d'éviter les boucles infinies.
+            // Car;Category;ImageCollection & Brand afin de signaler à
+            //normalizer quel données encodé en format Json pour éviter les boucles infinies.
             $carNormalized = $normalizer->normalize($Rqresult,null,[
                 'groups' => 'car:object'
             ]);

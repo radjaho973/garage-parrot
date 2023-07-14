@@ -14,7 +14,10 @@ security:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
         main:
-            login_throttling:  
+            login_throttling: 
+                        max_attempts: 5
+                        interval: '10 minutes'
+
             lazy: true
             provider: app_user_provider
             logout:
