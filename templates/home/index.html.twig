@@ -33,6 +33,23 @@
 }
 </style>
 
+{% for service in services %}
+    <div class="service-wrapper">
+      <h5>{{service.name}}</h5>
+      <p>{{service.description}}</p>
+      <p>{{service.picture_src}}</p>
+    </div>
+  {% endfor %}
+  <div>-------------------------</div>
+{% for testimonial in testimonials %}
+    <div class="testimonial-wrapper">
+      <h5>{{testimonial.name}}</h5>
+      <h5>{{testimonial.surname}}</h5>
+      <p>{{testimonial.message}}</p>
+      <p>{{testimonial.note}}</p>
+    </div>
+  {% endfor %}
+
 <!-- Slider main container -->
 
 <div class="swiper">

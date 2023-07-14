@@ -63,4 +63,16 @@ class CarRepository extends ServiceEntityRepository
 //            ->getOneOrNullResult()
 //        ;
 //    }
+    function search($formInput){
+        $qdb = $this->createQueryBuilder('c')
+            ->andWhere('c.name like :input')
+            ->join("c.brand","b")
+            ->orWhere("b.brand like :input")
+            ->join("c.category","cat")
+            ->orWhere("cat.category like :input")
+            ->orWhere('c.description like :input')
+            ->setParameter('input', '%'.$formInput.'%')
+        ;
+        return $qdb->getQuery()->getResult();
+    }
 }

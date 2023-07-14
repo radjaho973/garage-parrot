@@ -2,17 +2,19 @@
 
 namespace App\DataFixtures;
 
-use App\Entity\Brand;
-use App\Entity\Car;
-use App\Entity\Category;
-use App\Entity\ImageCollection;
-use App\Entity\OpenHours;
-use App\Entity\Services;
-use App\Entity\Testimonials;
-use App\Entity\WeekDay;
 use Faker\Factory;
+use App\Entity\Car;
+use App\Entity\User;
+use App\Entity\Brand;
+use App\Entity\WeekDay;
+use App\Entity\Category;
+use App\Entity\Services;
+use App\Entity\OpenHours;
+use App\Entity\Testimonials;
+use App\Entity\ImageCollection;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class AppFixtures extends Fixture
 {
@@ -73,7 +75,7 @@ class AppFixtures extends Fixture
                 $service = new Services;
                 $service->setName($faker->word());
                 $service->setDescription($faker->sentence(3,true));
-                $service->setPictureSrc("car-service-name.jpg");
+                $service->setpicture_src("car-service-name.jpg");
                 $manager->persist($service);
             }
             
@@ -108,6 +110,21 @@ class AppFixtures extends Fixture
                 $manager->persist($openHours);
             }
             
+            // $user = new User;
+            // $user->setName("Vincent");
+            // $user->setSurname("Parrot");
+            // $user->setEmail("admin@admin.fr");
+            // $user->setPassword("Admin123");
+            // $user->setRoles(["ROLE_ADMIN"]);
+            // $manager->persist($user);
+
+            // $user = new User;
+            // $user->setName("Employé");
+            // $user->setSurname("Test");
+            // $user->setEmail("employé@test.fr");
+            // $user->setPassword("Admin123");
+            // $user->setRoles(["ROLE_EMPLOYEE"]);
+            // $manager->persist($user);
 
         $manager->flush();
     }

@@ -2,10 +2,11 @@
 
 namespace App\Entity;
 
-use App\Repository\BrandRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\BrandRepository;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: BrandRepository::class)]
 class Brand
@@ -19,6 +20,7 @@ class Brand
     private Collection $fk_car_id;
 
     #[ORM\Column(length: 255)]
+    #[Groups("car:object")]
     private ?string $brand = null;
 
     public function __construct()

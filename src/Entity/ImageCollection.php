@@ -2,8 +2,9 @@
 
 namespace App\Entity;
 
-use App\Repository\ImageCollectionRepository;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\ImageCollectionRepository;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: ImageCollectionRepository::class)]
 class ImageCollection
@@ -17,6 +18,7 @@ class ImageCollection
     private ?Car $fk_car_id = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups("car:object")]
     private ?string $image_url = null;
 
     public function getId(): ?int

@@ -62,5 +62,7 @@ import './styles/app.css';
 //         let newImgBtn = document.querySelector("#new_image")
 //         newImgBtn.addEventListener('click',addImage)
 
-        
+class Card extends HTMLElement{
+
+}
 

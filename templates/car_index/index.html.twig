@@ -1,0 +1,134 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello CarIndexController!{% endblock %}
+
+{% block body %}
+<style>
+    .cards-container{
+        width:80vw;
+        height: 90vh;
+        display: flex;
+        justify-content: start;
+        gap: 10px;
+        flex-wrap: wrap;
+    }
+    .card-wrapper{
+        width: 300px;
+        /* height: 400px; */
+        background-color : white;
+        border-radius: 10px;
+    }
+    .card-img > img{
+        width: 300px;
+        height: 276px;
+    }
+</style>
+{# {{ form(form) }} #}
+
+<div class="from-wrapper">
+    <form>
+        <label for="search">Champ de recherche</label>
+        <input type="text" name="search" id="search">
+        <button type="button" id="search_btn">Rechercher</button>
+    </form>
+</div>
+<div class="cards-container">
+    {% for car in cars %}
+        <div class="card-wrapper">
+            <div class="card-img">
+                <img src="{{ asset("car_uploads/") ~ car.ImageCollection.Values[0].ImageUrl }}" alt="">
+            </div>
+            <div class="card-text">
+                <div class="card-title">
+                    <p> {{ car.name }} </p>
+                    <p> {{car.brand.brand}} </p>
+                </div>
+                <div class="card-info">
+                    <p> {{ car.mileage}} </p>
+                    <p> {{ car.price}} </p>
+                    <p> {{ car.YearPlacedInCirculation}} </p>
+                </div>
+                <a href=" {{path('app_car_show',  {'id': car.id})}} "><button>+</button></a>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+{% set imagePath = path('app_car_show', {'id' : 1}) %}
+
+<script>
+let searchForm = document.querySelector("#search")
+let searchBtn = document.querySelector("#search_btn")
+let cardsContainer = document.querySelector(".cards-container")
+let CarShowUrl = "{{ imagePath }}"
+
+searchBtn.addEventListener('click',isInputEmpty)
+
+function isInputEmpty(){
+    if (!searchForm.value) {
+        alert("veuillez rentrer une valeur dans le champ de recherche")
+    }else{
+        fetchCars()
+    }
+}
+
+let originUrl = window.location.origin
+
+ async function fetchCars() {
+    
+    let response = await fetch(`${originUrl}/car/index/ajax`,{
+        method:'POST',
+        headers : {
+            'X-Requested-With' : 'XMLHttpRequest'
+        },
+        body:  JSON.stringify({searchQuery:searchForm.value})
+    })
+        // console.log(response.text())
+    if (response.ok !== true) {
+            throw new Error(`Impossible de contacter le serveur, status : '${response.status}
+            si l\'erreur persiste veuiller vérifier que originUrl(l.72) renvoie bien la bonne url`)
+
+        }else{
+            //récupération du contenu json
+            let data = await response.json()
+            //On éfface les résultat précédent et on affiche les résultat 
+            //de la nouvelle requête
+            eraseResult()
+            cardsContainer.innerHTML = displayResult(data)
+    }
+
+}
+
+function eraseResult(){
+    //tant que le container à des éléments enfant alors on retire le dernier
+    while (cardsContainer.firstChild) {
+        cardsContainer.removeChild(cardsContainer.lastChild)
+    }
+}
+
+function displayResult(data){
+    let htmlString = ""
+    //pour chaque 
+    data.forEach(element => {
+        
+        htmlString += `<div class="card-wrapper">
+            <div class="card-img">
+                <img src="/car_uploads/${element.imageCollection[0].image_url}" alt="">
+            </div>
+            <div class="card-text">
+                <div class="card-title">
+                    <p> ${element.name} </p>
+                    <p> ${element.brand.brand} </p>
+                </div>
+                <div class="card-info">
+                    <p> ${element.mileage} km </p>
+                    <p> ${element.price} €</p>
+                    <p> ${element.yearPlacedInCirculation} </p>
+                </div>
+                <a href="${CarShowUrl.slice(0,-2)}/${element.id}"><button>+</button></a>
+            </div>
+        </div>`
+    });
+    return htmlString
+} 
+</script>
+{% endblock %}
