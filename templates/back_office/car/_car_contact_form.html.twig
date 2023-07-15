@@ -1,0 +1,10 @@
+{{ form_start(form) }}
+    {{ form_row(form.title) }}
+    {{ form_row(form.name) }}
+    {{ form_row(form.surname) }}
+    {{ form_row(form.email) }}
+    {{ form_row(form.phone) }}
+    {{ form_row(form.message) }}
+    {{ form_row(form.link , {'value' : app.request.uri} ) }}
+    <button class="btn">{{ button_label|default('Envoyer') }}</button>
+{{ form_end(form) }}

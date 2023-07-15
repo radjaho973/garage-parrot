@@ -110,21 +110,6 @@ class AppFixtures extends Fixture
                 $manager->persist($openHours);
             }
             
-            // $user = new User;
-            // $user->setName("Vincent");
-            // $user->setSurname("Parrot");
-            // $user->setEmail("admin@admin.fr");
-            // $user->setPassword("Admin123");
-            // $user->setRoles(["ROLE_ADMIN"]);
-            // $manager->persist($user);
-
-            // $user = new User;
-            // $user->setName("Employé");
-            // $user->setSurname("Test");
-            // $user->setEmail("employé@test.fr");
-            // $user->setPassword("Admin123");
-            // $user->setRoles(["ROLE_EMPLOYEE"]);
-            // $manager->persist($user);
 
         $manager->flush();
     }

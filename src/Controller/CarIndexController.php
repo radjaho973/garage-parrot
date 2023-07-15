@@ -24,7 +24,7 @@ class CarIndexController extends AbstractController
         $cars = $carRepo->findAll();
         
         $form = $this->createForm(CarSearchType::class);
-        $form->handleRequest($request);
+        
 
         // if ($form->isSubmitted() && $form->isValid()) {
             // dd($form->get('recherche')->getData());
@@ -54,9 +54,10 @@ class CarIndexController extends AbstractController
                 function dbQuery($request, CarRepository $carRepo){
                     
                     $data = json_decode($request->getContent(),true);
+                    // dd($data);
                     //requête personalisé dans le repo
-                    $dbQueryResult = $carRepo->search($data["searchQuery"]);
-                    
+                    $dbQueryResult = $carRepo->search($data);
+                    // dd($dbQueryResult);
                     return $dbQueryResult;
                 }
                 // Rqresult est un tableau avec les résultats de la recherche

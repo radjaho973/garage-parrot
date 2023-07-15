@@ -25,7 +25,6 @@
 </style>
 
  {{ form(form) }}
-<input type="range"/>
 
 <div class="from-wrapper">
     <form>
@@ -49,6 +48,7 @@
                     <p> {{ car.mileage}} </p>
                     <p> {{ car.price}} </p>
                     <p> {{ car.YearPlacedInCirculation}} </p>
+                    <p> {{ car.category.category}} </p>
                 </div>
                 <a href=" {{path('app_car_show',  {'id': car.id})}} "><button>+</button></a>
             </div>
@@ -58,33 +58,58 @@
 {% set imagePath = path('app_car_show', {'id' : 1}) %}
 
 <script>
-let searchForm = document.querySelector("#search")
-let searchBtn = document.querySelector("#search_btn")
 let cardsContainer = document.querySelector(".cards-container")
 let CarShowUrl = "{{ imagePath }}"
+//==================
+//  FORMULAIRE
+//==================
 
-searchBtn.addEventListener('click',isInputEmpty)
+let searchForm = document.querySelector("#car_search")
+let yearInput = document.querySelector("#car_search_year_circulation")
+let priceInput = document.querySelector("#car_search_Prix")
+let categoryInput = document.querySelector("#car_search_category")
+let brandInput = document.querySelector("#car_search_brand")
+let searchFormBtn = document.querySelector("#car_search_Rechercher")
 
-function isInputEmpty(){
-    if (!searchForm.value) {
-        alert("veuillez rentrer une valeur dans le champ de recherche")
-    }else{
-        fetchCars()
+
+class Form {
+    constructor( yearInput, priceInput, categoryInput,brandInput) {
+       
+        this.yearInput = yearInput;
+        this.priceInput = priceInput;
+        this.categoryInput = categoryInput;
+        this.brandInput = brandInput;
     }
 }
 
+
+searchFormBtn.addEventListener('click',(createForm))
+
+function createForm(){
+    let form = new Form(
+        yearInput.value,
+        priceInput.value,
+        categoryInput.value,
+        brandInput.value
+    )
+        console.log(form)
+    fetchCars(form)
+}
+//==================
+//  REQUÊTE AJAX
+//==================
 let originUrl = window.location.origin
 
- async function fetchCars() {
-    
+ async function fetchCars(form) {
     let response = await fetch(`${originUrl}/car/index/ajax`,{
         method:'POST',
         headers : {
             'X-Requested-With' : 'XMLHttpRequest'
         },
-        body:  JSON.stringify({searchQuery:searchForm.value})
+        //On transforme le form en object json
+        body:  JSON.stringify(form)
     })
-    
+    //sécurité implémenté par le composant rate/limit dans le controller
     if(response.status == 429){
         alert('Vous avez effectués trop de requêtes')
             throw new Error('too many requests')
@@ -101,7 +126,9 @@ let originUrl = window.location.origin
         }
     }
 
-
+//==================
+//  AFFICHAGE DES RÉSULTATS
+//==================
 function displayResult(data){
     eraseResult()
     let htmlString = ""
@@ -127,6 +154,7 @@ function displayResult(data){
                         <p> ${element.mileage} km </p>
                         <p> ${element.price} €</p>
                         <p> ${element.yearPlacedInCirculation} </p>
+                        <p> ${element.category.category} </p>
                     </div>
                     <a href="${CarShowUrl.slice(0,-2)}/${element.id}"><button>+</button></a>
                 </div>

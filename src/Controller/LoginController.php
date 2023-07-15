@@ -31,6 +31,7 @@ class LoginController extends AbstractController
     public function loginRedirect(): Response
     {
         $this->denyAccessUnlessGranted('ROLE_EMPLOYEE');
+        
         $userRole = $this->getUser()->getRoles();
         
         if ($userRole[0] == "ROLE_ADMIN") {
@@ -41,7 +42,7 @@ class LoginController extends AbstractController
 
             return $this->redirectToRoute('app_back_office_employee_panel');
         }elseif (empty($userRole) || $userRole == null) {
-            dd($this->getUser());
+            
             return $this->redirectToRoute('app_login');
         }
     }
