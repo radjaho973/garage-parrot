@@ -4,34 +4,41 @@ namespace App\Form;
 
 use App\Entity\WeekDay;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
-use Symfony\Component\Form\Extension\Core\Type\RadioType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\TimeType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
 class WeekHoursType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $builder
-            ->add('Lundi', TextType::class, [
-                'disabled' => true,
-                'data' => 'Lundi',
-            ])
-            ->add('start_hours',TimeType::class)
-            ->add('end_hours',TimeType::class)
-            ->add('closed',CheckboxType::class,[
-                'label' => 'Fermé'
-            ])
-        ;
-    }
+        $daysOfWeek = ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche'];
 
-    // public function configureOptions(OptionsResolver $resolver): void
-    // {
-    //     $resolver->setDefaults([
-    //         'data_class' => WeekDay::class,
-    //     ]);
-    // }
+        foreach ($daysOfWeek as $day) {
+            //chaque jour en miniscule avec seulement les 3 première lettres
+            $shortDayName = strtolower(substr($day, 0, 3));
+
+            $builder
+                ->add($shortDayName.'_day', HiddenType::class, [
+                    'data' => $day,
+                    // 'label' => $day
+                ])
+                ->add($shortDayName.'_start_time', TimeType::class, [
+                    'label' => $day." heure d'ouverture",
+                ])
+                ->add($shortDayName.'_end_time', TimeType::class,[
+                    'label' => $day." heure de fermeture"
+                ])
+                ->add($shortDayName.'_closed', CheckboxType::class, [
+                    'label' => 'Fermé',
+                    'required' => false
+                ]);
+        }
+        $builder->add("Enregistrer",SubmitType::class);
+    }
 }
+
