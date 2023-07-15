@@ -8,52 +8,58 @@
 // any CSS you import will output into a single css file (app.css in this case)
 import './styles/app.css';
 
-let imgCollectionHolder = document.querySelector('#car_image_collection')
+// let imgCollectionHolder = document.querySelector('#car_image_collection')
 
-    let indexCategory = imgCollectionHolder.querySelectorAll("car_category___name__").length
+//     let imgSubFormIndex = imgCollectionHolder.querySelectorAll("car_category___name__").length
 
-    
-    
-    function addImage() {
-        //récupère les attributs à l'intérieur de la div
-        // ImgCollectionHolder et remplace l'index [__name__]
-        // par indexCategory 
-        let dataPrototype =  imgCollectionHolder.dataset.prototype.replace(/__name__/g, indexCategory);
+//     class Form{
+//         constructor(subForm,deleteBtn){
+//             this.subForm = subForm;
+//             this.deleteBtn = deleteBtn
+            
+//         }
+//     }
+//     let formArray = []
+
+//     function addImage() {
+//         // récupère les attributs à l'intérieur de la div
+//         // ImgCollectionHolder et remplace l'index [__name__]
+//         // par imgSubFormIndex 
+//         let dataPrototype =  imgCollectionHolder.dataset.prototype.replace(/__name__/g, imgSubFormIndex);
         
-        console.log(dataPrototype);
-        // ajoute un nouveau champ image 
-        // à partir du contenu de la div (dataPrototype)
-        imgCollectionHolder.innerHTML += dataPrototype;
+//         // console.log(dataPrototype);
+//         // ajoute un nouveau champ image 
+//         // à partir du contenu de la div (dataPrototype)
+//         imgCollectionHolder.innerHTML += dataPrototype;
         
-        AddDeleteBtn()
-
-        indexCategory++;
-
-        console.log(indexCategory);
+//         let deleteBtn = document.createElement("button")
+//         deleteBtn.classList.add('btn', 'btn-delete')
+//         deleteBtn.setAttribute('type','button')
+//         deleteBtn.innerHTML = "Supprimer"
         
-    }
-
-    function AddDeleteBtn() {
+//         let subFormId = "#car_image_collection_"+ imgSubFormIndex.toString()
+//         //On sélectionne le wrapper puis le nouveau formulaire auquel
+//         //on ajoute le bouton supprimer
+//         let subForm = document.querySelector(`${subFormId}`).querySelector("div")
+//         subForm.appendChild(deleteBtn)
+                
+//         let form = new Form(subForm,deleteBtn)
         
-        let btnDelete = document.createElement("button")
-        btnDelete.classList.add('btn', 'btn-delete')
-        btnDelete.setAttribute('type','button')
-        btnDelete.innerHTML = "Supprimer"
-        
-        let subFormId = "#car_image_collection_"+ indexCategory.toString()
-        //On sélectionne le wrapper puis le nouveau formulaire auquel
-        //on ajoute le bouton supprimer
-        let subForm = document.querySelector(`${subFormId}`).querySelector("div")
-        subForm.appendChild(btnDelete)
-    }
+//         let pushedForm = Object.create(form)
+//         formArray.push(pushedForm)
+//         // console.log(form);
+//         formArray[imgSubFormIndex].deleteBtn.addEventListener('click',()=>{
+//             form.subForm.remove()
+//         })
 
-    // function deleteForm(params) {
-        
-    // }
+//         imgSubFormIndex++;
+//     }
 
-
-        let newImgBtn = document.querySelector("#new_image")
-        newImgBtn.addEventListener('click',addImage)
 
         
+  
+
+//         let newImgBtn = document.querySelector("#new_image")
+//         newImgBtn.addEventListener('click',addImage)
+
 

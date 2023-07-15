@@ -18,10 +18,10 @@ class OpenHours
     #[ORM\JoinColumn(nullable: false)]
     private ?WeekDay $fk_day = null;
 
-    #[ORM\Column(type: Types::TIME_MUTABLE)]
+    #[ORM\Column(type: Types::TIME_MUTABLE,nullable:true)]
     private ?\DateTimeInterface $start_time = null;
 
-    #[ORM\Column(type: Types::TIME_MUTABLE)]
+    #[ORM\Column(type: Types::TIME_MUTABLE,nullable:true)]
     private ?\DateTimeInterface $end_time = null;
 
     #[ORM\Column]

@@ -63,4 +63,98 @@ class CarRepository extends ServiceEntityRepository
 //            ->getOneOrNullResult()
 //        ;
 //    }
+    /**
+     * @return array tableau contenant un tableau associatif 
+     * avec year_min & year_max 
+     */
+    function getMinMaxYear(){
+        $qb= $this->createQueryBuilder('c')
+        ->select("MIN(c.yearPlacedInCirculation) AS year_min")
+        ->addSelect("MAX(c.yearPlacedInCirculation) AS year_max");
+        return $qb->getQuery()->getResult();
+    }
+    /**
+     * @return array tableau contenant un tableau associatif 
+     * avec price_min & price_max 
+     */
+    function getMinMaxPrice(){
+        $qb= $this->createQueryBuilder('c')
+        ->select("MIN(c.price) AS price_min")
+        ->addSelect("MAX(c.price) AS price_max");
+        return $qb->getQuery()->getResult();
+    }
+    /**
+     * @param array json passé  en tableau associatif
+     * @return array tableau contenant un tableau associatif 
+     * avec price_min & price_max 
+     */
+    function search($data){
+
+        //si il n'ya pas de marque et pas de catégorie choisie
+        // donc que les 2 empty() renvoie true
+        if( empty( trim($data["brandInput"]) ) &&
+         empty( trim($data["categoryInput"]) ) ){
+            
+            $qb = $this->createQueryBuilder('c')
+            ->andWhere('c.price <= :priceData')
+            ->andWhere('c.yearPlacedInCirculation <= :yearData')
+            ->setParameter('yearData', $data["yearInput"] )
+            ->setParameter('priceData', $data["priceInput"])
+            ;
+            return $qb->getQuery()->getResult();
+        }
+        //si il y'a une marque et une catégorie choisie
+        // donc que les 2 empty() renvoie false
+        if( !empty( trim($data["brandInput"]) ) &&
+         !empty( trim($data["categoryInput"]) ) ){
+            
+             $qb = $this->createQueryBuilder('c')
+             ->andWhere('c.yearPlacedInCirculation <= :yearData')
+             ->andWhere('c.price <= :priceData')
+             ->join("c.category","cat")
+             ->andWhere("cat.id = :catData")
+             ->join("c.brand","b")
+             ->andWhere("b.id = :brandData")
+             ->setParameter('yearData', $data["yearInput"] )
+             ->setParameter('priceData', $data["priceInput"])
+             ->setParameter('catData', $data["categoryInput"])
+             ->setParameter('brandData', $data["brandInput"])
+             ;
+             
+            return $qb->getQuery()->getResult();
+        }
+        // si il y'a une marque et pas de catégorie choisie
+        if( !empty( trim($data["brandInput"]) ) &&
+         empty( trim($data["categoryInput"]) ) ){
+            
+            $qb = $this->createQueryBuilder('c')
+            ->andWhere('c.yearPlacedInCirculation <= :yearData')
+            ->andWhere('c.price <= :priceData')
+            ->join("c.brand","b")
+            ->andWhere("b.id = :brandData")
+            ->setParameter('yearData', $data["yearInput"] )
+            ->setParameter('priceData', $data["priceInput"])
+            ->setParameter('brandData', $data["brandInput"])
+            ;
+
+            return $qb->getQuery()->getResult();
+        }
+        //si il n'y a pas de marque mais une catégorie choisie
+        if( empty( trim($data["brandInput"]) ) &&
+         !empty( trim($data["categoryInput"]) ) ){
+            
+            $qb = $this->createQueryBuilder('c')
+             ->andWhere('c.yearPlacedInCirculation <= :yearData')
+             ->andWhere('c.price <= :priceData')
+             ->join("c.category","cat")
+             ->andWhere("cat.id = :catData")
+             ->setParameter('yearData', $data["yearInput"] )
+             ->setParameter('priceData', $data["priceInput"])
+             ->setParameter('catData', $data["categoryInput"])
+             ;
+             
+            return $qb->getQuery()->getResult();
+        }
+        
+    }
 }

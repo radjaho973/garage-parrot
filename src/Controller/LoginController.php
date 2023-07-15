@@ -4,8 +4,6 @@ namespace App\Controller;
 
 use App\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Bundle\SecurityBundle\Security;
-use Symfony\Bundle\SecurityBundle\SecurityBundle;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -32,17 +30,19 @@ class LoginController extends AbstractController
     #[Route('/login-redirect', name: 'app_login_redirect')]
     public function loginRedirect(): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_EMPLOYEE');
+        
         $userRole = $this->getUser()->getRoles();
         
         if ($userRole[0] == "ROLE_ADMIN") {
-
+            
             return $this->redirectToRoute('app_back_office_admin_panel');
-        
+            
         }elseif ($userRole[0] == "ROLE_EMPLOYEE") {
 
             return $this->redirectToRoute('app_back_office_employee_panel');
-        }elseif (empty($userRole)) {
-
+        }elseif (empty($userRole) || $userRole == null) {
+            
             return $this->redirectToRoute('app_login');
         }
     }

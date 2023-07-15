@@ -7,6 +7,7 @@ use App\Entity\Brand;
 use App\Form\CarType;
 use App\Entity\Category;
 use App\Entity\ImageCollection;
+use App\Form\ContactType;
 use App\Repository\CarRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\ImageCollectionRepository;
@@ -20,7 +21,7 @@ use Symfony\Component\HttpFoundation\File\Exception\FileException;
 #[Route('/back-office/car')]
 class CarController extends AbstractController
 {
-    #[Route('/', name: 'app_car_index', methods: ['GET'])]
+    #[Route('/', name: 'back_office_app_car_index', methods: ['GET'])]
     public function index(CarRepository $carRepository): Response
     {
         return $this->render('back_office/car/index.html.twig', [
@@ -90,7 +91,7 @@ class CarController extends AbstractController
             $em->flush();
             
 
-            return $this->redirectToRoute('app_car_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('back_office_app_car_index', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->renderForm('back_office/car/new.html.twig', [
@@ -100,10 +101,18 @@ class CarController extends AbstractController
     }
 
     #[Route('/{id}', name: 'app_car_show', methods: ['GET'])]
-    public function show(Car $car): Response
+    public function show(Car $car, Request $request): Response
     {
+        $form = $this->createForm(ContactType::class);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            //do some stuff
+        }
+
         return $this->render('back_office/car/show.html.twig', [
             'car' => $car,
+            'form' => $form
         ]);
     }
 
@@ -116,7 +125,7 @@ class CarController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $carRepository->save($car, true);
 
-            return $this->redirectToRoute('app_car_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('back_office_app_car_index', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->renderForm('back_office/car/edit.html.twig', [
@@ -132,6 +141,6 @@ class CarController extends AbstractController
             $carRepository->remove($car, true);
         }
 
-        return $this->redirectToRoute('app_car_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('back_office_app_car_index', [], Response::HTTP_SEE_OTHER);
     }
 }

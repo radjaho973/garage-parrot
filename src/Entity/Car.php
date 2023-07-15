@@ -6,6 +6,7 @@ use App\Repository\CarRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: CarRepository::class)]
 class Car
@@ -13,24 +14,30 @@ class Car
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups("car:object")]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups("car:object")]
     private ?string $name = null;
 
     #[ORM\Column]
+    #[Groups("car:object")]
     private ?int $price = null;
 
     #[ORM\Column]
+    #[Groups("car:object")]
     private ?int $yearPlacedInCirculation = null;
 
     #[ORM\Column]
+    #[Groups("car:object")]
     private ?int $mileage = null;
 
     #[ORM\Column(length: 255)]
     private ?string $description = null;
 
-    #[ORM\OneToMany(mappedBy: 'fk_car_id', targetEntity: ImageCollection::class)]
+    #[ORM\OneToMany(mappedBy: 'fk_car_id', targetEntity: ImageCollection::class, fetch:'EAGER')]
+    #[Groups("car:object")]
     private Collection $imageCollection;
 
     #[ORM\OneToMany(mappedBy: 'fk_car_id', targetEntity: Options::class)]
@@ -38,10 +45,12 @@ class Car
 
     #[ORM\ManyToOne(inversedBy: 'fk_car_id')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups("car:object")]
     private ?Category $category = null;
 
     #[ORM\ManyToOne(inversedBy: 'fk_car_id')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups("car:object")]
     private ?Brand $brand = null;
 
     public function __construct()

@@ -32,9 +32,8 @@ class RegistrationController extends AbstractController
             $user->setRoles(["ROLE_EMPLOYEE"]);
             $entityManager->persist($user);
             $entityManager->flush();
-            // do anything else you need here, like send an email
 
-            return $this->redirectToRoute('app_login_redirect');
+            return $this->redirectToRoute('app_login');
         }
 
         return $this->render('registration/register.html.twig', [

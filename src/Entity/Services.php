@@ -52,12 +52,12 @@ class Services
         return $this;
     }
 
-    public function getPictureSrc(): ?string
+    public function getpicture_src(): ?string
     {
         return $this->picture_src;
     }
 
-    public function setPictureSrc(string $picture_src): static
+    public function setpicture_src(string $picture_src): static
     {
         $this->picture_src = $picture_src;
 

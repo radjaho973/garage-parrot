@@ -37,6 +37,16 @@ class TestimonialsRepository extends ServiceEntityRepository
         if ($flush) {
             $this->getEntityManager()->flush();
         }
+        
+    } 
+    
+    function getValidatedTestimonials(){
+        return $this->createQueryBuilder('t')
+        ->andWhere('t.pending_verification = 0')
+        ->andWhere('t.is_validated = 1')
+        ->orderBy('t.id', "DESC")
+        ->getQuery()
+        ->getResult();
     }
 
 //    /**
