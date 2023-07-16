@@ -55,4 +55,14 @@ class WeekHoursController extends AbstractController
             'form' => $form,
         ]);
     }
+    
+    #[Route('display-schedule', name: 'app_schedule')]
+    public function DisplaySchedule(WeekDayRepository $weekDayRepo, ): Response
+    {
+        $schedule = $weekDayRepo->findAll();
+        // dd($schedule);
+        return $this->render('_schedule.html.twig',[
+            'schedule' => $schedule
+        ]);
+    }
 }

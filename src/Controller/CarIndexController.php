@@ -38,16 +38,16 @@ class CarIndexController extends AbstractController
      // if you're using service autowiring, the variable name must be:
     // "rate limiter name" (in camelCase) + "Limiter" suffix
     #[Route('/car/index/ajax', name: 'app_car_index_ajax', methods:["POST"])]
-    public function ajax(CarRepository $carRepo,Request $request,RateLimiterFactory $ajaxRequestLimiter, NormalizerInterface $normalizer): JsonResponse
+    public function ajax(CarRepository $carRepo,Request $request,RateLimiterFactory $rateLimiter, NormalizerInterface $normalizer): JsonResponse
     {
         
         if (!$request->isXmlHttpRequest()) {
             return $this->json('error');
         }else{
-            //ajout d'une limite de requête ajax pour sécuriser l'application
-            $limiter = $ajaxRequestLimiter->create($request->getClientIp());
+            //ajout d'une limite de requête  pour sécuriser l'application
+            $requestLimiter = $rateLimiter->create($request->getClientIp());
 
-            if ($limiter->consume(1)->isAccepted() == true) {
+            if ($requestLimiter->consume(1)->isAccepted() == true) {
                 
                 //passe les classes à l'intérieur de la fonction pour les
                 //utiliser

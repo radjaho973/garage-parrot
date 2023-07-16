@@ -79,4 +79,9 @@ class OpenHours
 
         return $this;
     }
+    public function getIsClosed() : ?bool
+    {
+        return $this->is_closed;
+    }
+   
 }

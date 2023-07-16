@@ -1,0 +1,13 @@
+
+{% for weekDay in schedule %}
+    <div class="day-wrapper">
+
+    {{ weekDay.day }}
+
+    {% if not weekDay.openHours.IsClosed %}
+        {{ weekDay.openHours.StartTime.format('H:i') }}
+        {{ weekDay.openHours.EndTime.format('H:i') }}
+    {% endif %}
+
+    </div>
+{% endfor %}

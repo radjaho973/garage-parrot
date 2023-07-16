@@ -12,6 +12,7 @@ use App\Entity\Services;
 use App\Entity\OpenHours;
 use App\Entity\Testimonials;
 use App\Entity\ImageCollection;
+use DateTime;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -108,16 +109,26 @@ class AppFixtures extends Fixture
             //===========HORAIRES
 
             $dayArray = ['Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi','Dimanche'];
+            $i = 0;
             foreach ($dayArray as $day) {
                 
                 $weekday = new WeekDay;
                 $weekday->setDay($day);
-                
-                $openHours = new OpenHours;
-                $openHours->setStartTime($faker->dateTime());
-                $openHours->setEndTime($faker->dateTime());
-                $openHours->setIsClosed(0);
-                $weekday->setOpenHours($openHours);
+                if($i <= 4){
+                    
+                    $openHours = new OpenHours;
+                    $openHours->setStartTime(new DateTime("07:30:00"));
+                    $openHours->setEndTime(new DateTime("17:30:00"));
+                    $openHours->setIsClosed(false);
+                    $weekday->setOpenHours($openHours);
+                }else{
+                    
+                    $openHours = new OpenHours;
+                    $openHours->setIsClosed(true);
+                    $weekday->setOpenHours($openHours);
+                    // dd($weekday);
+                }
+                $i++;
                 
                 $manager->persist($weekday);
                 $manager->persist($openHours);
