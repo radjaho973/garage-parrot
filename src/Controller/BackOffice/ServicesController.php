@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\String\Slugger\SluggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 
 #[Route('back-office/admin/services')]
@@ -35,9 +36,9 @@ class ServicesController extends AbstractController
             if ($ImageFile) {
                     
                     $ServiceName = $form->get('name')->getData();
-                    $originalFileName = pathinfo($ServiceName, PATHINFO_FILENAME);
+                    // $originalFileName = pathinfo($ServiceName, PATHINFO_FILENAME);
                     // transforme le nom du fichier en slug utilisable
-                    $safeFileName = $slugger->slug($originalFileName);
+                    $safeFileName = $slugger->slug($ServiceName);
                     
                     $newFileName = $safeFileName.'-'.uniqid().'.'.$ImageFile->guessExtension();
                     
@@ -47,10 +48,11 @@ class ServicesController extends AbstractController
                             $this->getParameter('service_directory'),
                             $newFileName
                         );
-                        $service->setPictureSrc($newFileName);
+                        $service->setpicture_src($newFileName);
                         
                     }catch (FileException $e){
-                        dd($e);
+                        return new Response(`Une erreur c'est produite durant
+                        l'envoie de fichier`,400 );
                     }
                 }
                 
@@ -74,12 +76,39 @@ class ServicesController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'app_services_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Services $service, ServicesRepository $servicesRepository): Response
+    public function edit(Request $request,SluggerInterface $slugger, Services $service, ServicesRepository $servicesRepository): Response
     {
         $form = $this->createForm(ServicesType::class, $service);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
+            $ImageFile = $form->get('picture_src')->getData();
+            
+            // On remplace l'anciènne image  par la nouvelle si elle existe
+            if ($ImageFile) {
+
+                $ServiceName = $form->get('name')->getData();
+                    
+                    // transforme le nom du fichier en slug utilisable
+                    $safeFileName = $slugger->slug($ServiceName);
+                    
+                    $newFileName = $safeFileName.'-'.uniqid().'.'.$ImageFile->guessExtension();
+                    ;
+                    
+                    try{
+                        $ImageFile->move(
+                            //services.yaml sous parameters
+                            $this->getParameter('service_directory'),
+                            $newFileName
+                        );
+                        $service->setpicture_src($newFileName);
+                        
+                    }catch (FileException $e){
+                        return new Response(`Une erreur c'est produite durant
+                        l'envoie de fichier`,400 );
+                    }
+            }
             $servicesRepository->save($service, true);
 
             return $this->redirectToRoute('app_services_index', [], Response::HTTP_SEE_OTHER);

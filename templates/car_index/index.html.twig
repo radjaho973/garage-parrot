@@ -26,12 +26,6 @@
 
  {{ form(form) }}
 
-<div class="from-wrapper">
-    <form>
-        <label for="search">Champ de recherche</label>
-        <input type="text" name="search" id="search">
-        <button type="button" id="search_btn">Rechercher</button>
-    </form>
 </div>
 <div class="cards-container">
     {% for car in cars %}
@@ -92,7 +86,6 @@ function createForm(){
         categoryInput.value,
         brandInput.value
     )
-        console.log(form)
     fetchCars(form)
 }
 //==================
@@ -116,7 +109,7 @@ let originUrl = window.location.origin
         
     }else if (response.ok !== true) {
             throw new Error(`Impossible de contacter le serveur, status : '${response.status}
-            si l\'erreur persiste veuiller vérifier que originUrl(l.72) renvoie bien la bonne url`)
+            si l\'erreur persiste veuiller vérifier que originUrl renvoie bien la bonne url`)
     }else{
             //récupération du contenu json
             let data = await response.json()

@@ -10,7 +10,6 @@ use App\Entity\ImageCollection;
 use App\Form\ContactType;
 use App\Repository\CarRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use App\Repository\ImageCollectionRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -61,7 +60,8 @@ class CarController extends AbstractController
                             $newFileName
                         );
                     }catch (FileException $e){
-                        dd($e);
+                        return new Response(`Une erreur c'est produite durant
+                        l'envoie de fichier`,400 );
                     }
                     // ajout du slug à la table image collection
                     // et liaison avec la voiture enregistré 

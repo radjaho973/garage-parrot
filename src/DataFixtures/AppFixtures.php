@@ -18,11 +18,19 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class AppFixtures extends Fixture
 {
-    public function load(ObjectManager $manager): void
+    private $userPasswordHasher;
+
+    public function __construct (UserPasswordHasherInterface $userPasswordHasher) 
     {
-       
+        $this->userPasswordHasher = $userPasswordHasher;
+    }
+    
+    public function load(ObjectManager $manager): void
+    {    
         $faker = Factory::create();
+
         //==========MARQUES
+
         $brandArray = ["Peugeot","Citroen","Twingo","BMW","Toyota"];
         for ($i=0; $i < count($brandArray); $i++) {
             $brand = new Brand;
@@ -31,6 +39,7 @@ class AppFixtures extends Fixture
         }
         
         //=========CATEGORIES
+
         $category1 = new Category;
         $category1->setCategory("Essence");
         $manager->persist($category1);
@@ -39,7 +48,9 @@ class AppFixtures extends Fixture
         $manager->persist($category2);
         
         $manager->flush();
+
         //=========VOITURES
+
         $categoryArray = $manager->getRepository(Category::class)->findAll();
         $brandArray = $manager->getRepository(Brand::class)->findAll();
         
@@ -65,12 +76,12 @@ class AppFixtures extends Fixture
                 $car->addImageCollection($images);
                 $manager->persist($images);
             }
-        
             $manager->persist($car);
         }
             
             
             //===========SERVICES
+
             for ($i=0; $i < 4; $i++) { 
                 $service = new Services;
                 $service->setName($faker->word());
@@ -81,6 +92,7 @@ class AppFixtures extends Fixture
             
             
             //===========TEMOIGNAGES
+
             for ($i=0; $i < 5; $i++) { 
                 $testimonial = new Testimonials;
                 $testimonial->setName($faker->firstName());
@@ -94,6 +106,7 @@ class AppFixtures extends Fixture
             
             
             //===========HORAIRES
+
             $dayArray = ['Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi','Dimanche'];
             foreach ($dayArray as $day) {
                 
@@ -109,8 +122,40 @@ class AppFixtures extends Fixture
                 $manager->persist($weekday);
                 $manager->persist($openHours);
             }
-            
 
+
+            
+            //===========UTILISATEURS
+            
+            $motdepasse = "Admin123";
+
+            $user = new User;
+                $user->setName("Vincent");
+                $user->setSurname("Parrot");
+                $user->setEmail("admin@admin.fr");
+                $user->setRoles(["ROLE_ADMIN"]);
+                $user->setPassword(
+                    $this->userPasswordHasher->hashPassword(
+                        $user,
+                        $motdepasse
+                    ));
+                $manager->persist($user);
+
+            for ($i=0; $i < 5; $i++) { 
+                $user = new User;
+                    $user->setName($faker->firstName());
+                    $user->setSurname($faker->lastName());
+                    $user->setEmail($faker->email());
+                    $user->setRoles(["ROLE_EMPLOYEE"]);
+                    $user->setPassword(
+                        $this->userPasswordHasher->hashPassword(
+                            $user,
+                            $motdepasse
+                        )
+                    );
+                $manager->persist($user);
+            }
+            
         $manager->flush();
     }
 }

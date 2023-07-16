@@ -22,7 +22,7 @@ class ServicesType extends AbstractType
                 'required'=> false,
                 'constraints' =>[
                     new File ([
-                        'maxSize' => '32M',
+                        'maxSize' => '2M',
                         'extensions' =>[
                             'webp',
                             'jpeg',

@@ -5,6 +5,7 @@ namespace App\Controller\BackOffice;
 use App\Entity\WeekDay;
 use App\Entity\OpenHours;
 use App\Form\WeekHoursType;
+use App\Repository\WeekDayRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -14,52 +15,44 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class WeekHoursController extends AbstractController
 {
     #[Route('back-office/admin/open', name: 'app_week_hours')]
-    public function index(Request $request, EntityManagerInterface $em): Response
+    public function index(Request $request,WeekDayRepository $weekDayRepo, EntityManagerInterface $em): Response
     {
         $form = $this->createForm(WeekHoursType::class);
         $form->handleRequest($request);
         $daysOfWeek = ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche'];
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $formArrayResult = $form->getData();
-            
-            //On vérifie que l'input caché de
-            // chaque jour n'a pas été modifié
-            // foreach ($daysOfWeek as $day) {
-                //chaque jour en miniscule avec seulement les 3 première lettres
-            //         //ex : si "Lundi" == lun_day => "Lundi"
-            //     if ($day == $formArrayResult[$shortDayName."_day"]) {
-                //         $weekDay = new WeekDay;
-                //         $weekDay->setDay($day);
-                //     }
-                // }
-                foreach ($daysOfWeek as $day) {
-                //chaque jour en miniscule avec seulement les 3 première lettres
-                    $dayShort = strtolower(substr($day, 0, 3));
 
-                    $weekDay = new WeekDay;
-                    $weekDay->setDay($day);
-                    $openHours = new OpenHours;
-                        //ex: lun_closed => false
-                    if ($form->get($dayShort."_closed")->getData()) {
-                        $openHours->setIsClosed(1);
-                        $weekDay->setOpenHours($openHours);
+                foreach ($daysOfWeek as $day) {
+                    //On assigne à chaque jour son correspondant en bdd
+                    $existingDay = $weekDayRepo->findOneBy([
+                        'day' => $day
+                    ]);
+
+                // chaque jour en miniscule avec seulement les 3 première lettres
+                    $dayShort = strtolower(substr($day, 0, 3));
+                    // pour chaque jour on crée des heures d'ouverture
+                    // et fermeture sauf si fermé
+                    $newOpenHours = $existingDay->getOpenHours();
+                    // ex: get(lun_closed)
+                    if ($form->get($dayShort."_closed")->getData()) { //retourne un booléen
+                        $newOpenHours->setIsClosed(1);
+                        $existingDay->setOpenHours($newOpenHours);
                     }else{
-                        $openHours->setStartTime($form->get($dayShort."_start_time")->getData());
-                        $openHours->setEndTime($form->get($dayShort."_start_time")->getData());
-                        $openHours->setIsClosed(0);
-                        $weekDay->setOpenHours($openHours);
+                        $newOpenHours->setStartTime($form->get($dayShort."_start_time")->getData());
+                        $newOpenHours->setEndTime($form->get($dayShort."_start_time")->getData());
+                        $newOpenHours->setIsClosed(0);
+                        $existingDay->setOpenHours($newOpenHours);
                     }
-                    $em->persist($openHours);
-                    $em->persist($weekDay);
-                    // dd($form->get($dayShort."_closed")->getData());
+                    $em->persist($newOpenHours);
+                    $em->persist($existingDay);
                 }
                 
-                $em->flush($weekDay);
+                $em->flush();
         }
         return $this->render('back_office/week_hours/index.html.twig', [
+            'days_of_week' => $daysOfWeek,
             'form' => $form,
-            'controller_name' => 'WeekHoursController',
         ]);
     }
 }

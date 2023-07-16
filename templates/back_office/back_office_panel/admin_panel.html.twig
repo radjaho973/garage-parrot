@@ -1,10 +1,8 @@
-{% extends 'base_back_office.html.twig' %}
-
+{% extends '/back_office/base_back_office.html.twig' %}
 {% block title %}Panneau Administration Admin{% endblock %}
 
 {% block body %}
 {% if is_granted('ROLE_ADMIN') %} 
-<?php info> upload_max_filesize <php>
 <div class="example-wrapper">
     <h1>User index</h1>
 

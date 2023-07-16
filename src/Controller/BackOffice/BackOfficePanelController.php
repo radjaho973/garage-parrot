@@ -17,7 +17,7 @@ class BackOfficePanelController extends AbstractController
         ]);
     }
 
-    #[Route('/back-office/admin/', name: 'app_back_office_admin_panel')]
+    #[Route('/back-office/admin', name: 'app_back_office_admin_panel')]
     public function displayAdminPanel(UserRepository $userRepo): Response
     {
         return $this->render('back_office/back_office_panel/admin_panel.html.twig', [
