@@ -17,6 +17,8 @@ class WeekHoursController extends AbstractController
     #[Route('back-office/admin/open', name: 'app_week_hours')]
     public function index(Request $request,WeekDayRepository $weekDayRepo, EntityManagerInterface $em): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+
         $form = $this->createForm(WeekHoursType::class);
         $form->handleRequest($request);
         $daysOfWeek = ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche'];
@@ -59,8 +61,10 @@ class WeekHoursController extends AbstractController
     #[Route('display-schedule', name: 'app_schedule')]
     public function DisplaySchedule(WeekDayRepository $weekDayRepo, ): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+
         $schedule = $weekDayRepo->findAll();
-        // dd($schedule);
+        
         return $this->render('_schedule.html.twig',[
             'schedule' => $schedule
         ]);

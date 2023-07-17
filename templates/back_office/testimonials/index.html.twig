@@ -21,7 +21,7 @@
         <tbody>
         {% for testimonial in testimonials %}
             <tr>
-                <td>{{ testimonial.id }}</td>
+                {# <td>{{ testimonial.id }}</td> #}
                 <td>{{ testimonial.name }}</td>
                 <td>{{ testimonial.surname }}</td>
                 <td>{{ testimonial.message }}</td>
@@ -29,8 +29,10 @@
                 <td>{{ testimonial.pendingVerification ? 'Yes' : 'No' }}</td>
                 <td>{{ testimonial.isValidated ? 'Yes' : 'No' }}</td>
                 <td>
-                    <a href="{{ path('app_testimonials_show', {'id': testimonial.id}) }}">show</a>
+                    {# <a href="{{ path('app_testimonials_show', {'id': testimonial.id}) }}">show</a> #}
                     <a href="{{ path('app_testimonials_edit', {'id': testimonial.id}) }}">edit</a>
+                    {{ include('back_office/testimonials/_validate_form.html.twig') }}                
+                    {{ include('back_office/testimonials/_revoke_form.html.twig') }}                
                 </td>
             </tr>
         {% else %}
@@ -41,5 +43,4 @@
         </tbody>
     </table>
 
-    <a href="{{ path('app_testimonials_new') }}">Create new</a>
 {% endblock %}

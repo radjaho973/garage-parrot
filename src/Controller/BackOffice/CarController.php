@@ -23,6 +23,8 @@ class CarController extends AbstractController
     #[Route('/', name: 'back_office_app_car_index', methods: ['GET'])]
     public function index(CarRepository $carRepository): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_EMPLOYEE');
+
         return $this->render('back_office/car/index.html.twig', [
             'cars' => $carRepository->findAll(),
         ]);
@@ -31,6 +33,8 @@ class CarController extends AbstractController
     #[Route('/new', name: 'app_car_new', methods: ['GET', 'POST'])]
     public function new(EntityManagerInterface $em, Request $request, CarRepository $carRepository, SluggerInterface $slugger): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_EMPLOYEE');
+
         $car = new Car();
 
         $form = $this->createForm(CarType::class, $car);
@@ -103,22 +107,20 @@ class CarController extends AbstractController
     #[Route('/{id}', name: 'app_car_show', methods: ['GET'])]
     public function show(Car $car, Request $request): Response
     {
-        $form = $this->createForm(ContactType::class);
-        $form->handleRequest($request);
+        
+        $this->denyAccessUnlessGranted('ROLE_EMPLOYEE');
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            //do some stuff
-        }
-
+       
         return $this->render('back_office/car/show.html.twig', [
             'car' => $car,
-            'form' => $form
         ]);
     }
 
     #[Route('/{id}/edit', name: 'app_car_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Car $car, CarRepository $carRepository): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_EMPLOYEE');
+
         $form = $this->createForm(CarType::class, $car);
         $form->handleRequest($request);
 
@@ -137,6 +139,8 @@ class CarController extends AbstractController
     #[Route('/{id}', name: 'app_car_delete', methods: ['POST'])]
     public function delete(Request $request, Car $car, CarRepository $carRepository): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_EMPLOYEE');
+        
         if ($this->isCsrfTokenValid('delete'.$car->getId(), $request->request->get('_token'))) {
             $carRepository->remove($car, true);
         }

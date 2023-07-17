@@ -19,6 +19,8 @@ class ServicesController extends AbstractController
     #[Route('/', name: 'app_services_index', methods: ['GET'])]
     public function index(ServicesRepository $servicesRepository): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+
         return $this->render('back_office/services/index.html.twig', [
             'services' => $servicesRepository->findAll(),
         ]);
@@ -27,6 +29,8 @@ class ServicesController extends AbstractController
     #[Route('/new', name: 'app_services_new', methods: ['GET', 'POST'])]
     public function new(SluggerInterface $slugger, Request $request, ServicesRepository $servicesRepository): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+
         $service = new Services();
         $form = $this->createForm(ServicesType::class, $service);
         $form->handleRequest($request);
@@ -70,6 +74,8 @@ class ServicesController extends AbstractController
     #[Route('/{id}', name: 'app_services_show', methods: ['GET'])]
     public function show(Services $service): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+
         return $this->render('back_office/services/show.html.twig', [
             'service' => $service,
         ]);
@@ -78,6 +84,8 @@ class ServicesController extends AbstractController
     #[Route('/{id}/edit', name: 'app_services_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request,SluggerInterface $slugger, Services $service, ServicesRepository $servicesRepository): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+
         $form = $this->createForm(ServicesType::class, $service);
         $form->handleRequest($request);
 
@@ -123,6 +131,8 @@ class ServicesController extends AbstractController
     #[Route('/{id}', name: 'app_services_delete', methods: ['POST'])]
     public function delete(Request $request, Services $service, ServicesRepository $servicesRepository): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+
         if ($this->isCsrfTokenValid('delete'.$service->getId(), $request->request->get('_token'))) {
             $servicesRepository->remove($service, true);
         }

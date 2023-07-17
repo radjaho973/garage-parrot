@@ -2,7 +2,9 @@
 
 namespace App\Controller;
 
+use App\Entity\Car;
 use App\Form\CarType;
+use App\Form\ContactType;
 use App\Form\CarSearchType;
 use App\Repository\CarRepository;
 use Symfony\Component\HttpFoundation\Request;
@@ -38,14 +40,14 @@ class CarIndexController extends AbstractController
      // if you're using service autowiring, the variable name must be:
     // "rate limiter name" (in camelCase) + "Limiter" suffix
     #[Route('/car/index/ajax', name: 'app_car_index_ajax', methods:["POST"])]
-    public function ajax(CarRepository $carRepo,Request $request,RateLimiterFactory $rateLimiter, NormalizerInterface $normalizer): JsonResponse
+    public function ajax(CarRepository $carRepo,Request $request,RateLimiterFactory $ajaxRequestLimiter, NormalizerInterface $normalizer): JsonResponse
     {
         
         if (!$request->isXmlHttpRequest()) {
             return $this->json('error');
         }else{
             //ajout d'une limite de requête  pour sécuriser l'application
-            $requestLimiter = $rateLimiter->create($request->getClientIp());
+            $requestLimiter = $ajaxRequestLimiter->create($request->getClientIp());
 
             if ($requestLimiter->consume(1)->isAccepted() == true) {
                 
@@ -76,5 +78,21 @@ class CarIndexController extends AbstractController
             } 
         }
        
+    }
+    #[Route('/car/display/{id}', name: 'app_car_front_display',methods: ['GET'])]
+    public function displayCar(Car $car,Request $request): Response
+    {
+        $form = $this->createForm(ContactType::class);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            //do some stuff
+        }
+        return $this->render('./car_index/display_car.html.twig',[
+            'form' => $form,
+            'car' => $car
+
+        ]);
+
     }
 }
