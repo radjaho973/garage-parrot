@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello DisplayServicesController!{% endblock %}
+
+{% block body %}
+<style>
+    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
+    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+</style>
+
+<div class="container">
+   {% for service in services %}
+   <div class="container row my-4">
+        <div class="col-7">
+            <h2>{{ service.name}}</h2>
+            <p>{{ service.description}}</p>
+        </div>
+        <div class="col-5">
+            <img class="w-100 rounded" src="{{ asset('service_uploads/' ~ service.picture_src) }}" alt="">
+        </div>
+   </div>
+   {% endfor %}
+</div>
+{% endblock %}

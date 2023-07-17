@@ -1,0 +1,50 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Car{% endblock %}
+
+{% block body %}
+    <h1>Car</h1>
+
+<div class="container">
+{% for imageCollection in car.ImageCollection.Values %}
+    
+ <img class=" w-50 rounded-top " src="{{ asset("car_uploads/") ~ imageCollection.ImageUrl }}" alt="">
+
+{% endfor %}
+  
+</div>
+
+    <a href="{{ path('app_car_index_ajax') }}">back to list</a>
+
+<div class="container">
+    <h2> {{car.brand.brand}} </h2>
+    <h2> {{car.name}} </h2>
+    <h3> {{car.yearPlacedInCirculation}} </h3>
+</div>
+<span class="separator"></span>
+
+<div class="container">
+    <div class="col-6">
+    <p> {{car.}} </p>
+    </div>
+</div>
+
+                {# <td id="car-name">{{ car.name }}</td> #}
+{% endblock %}
+{# Permet d'activer ou non le formulaire dans le footer de la page #}
+{# l'affichage du formulaire dépend si l'utilisateur se trouve sur
+cette vue  #}
+{% set displayPage = 1 %}
+ {% block contact_form %}
+
+        {% include "back_office/car/_car_contact_form.html.twig" %}
+        <script>
+        // Script permettant de rajouter le nom et la marque de 
+        // la voiture sur le formulaire
+        let contactTitle = document.querySelector("#contact_title")
+        let carName = document.querySelector("#car-name")
+        // console.log(carName)
+        contactTitle.value = carName.innerText
+        </script>
+
+    {% endblock %}

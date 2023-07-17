@@ -1,0 +1,26 @@
+
+      <table class="table table-dark">
+        <thead>
+          <tr>
+            <th>Jour</th>
+            <th>Ouverture</th>
+            <th>Fermeture</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for weekDay in schedule %}
+            <tr>
+              <td>{{ weekDay.day }}</td>
+                {# si le jour n'est pas fermé on ajoute les horaires #}
+              {% if not weekDay.openHours.IsClosed %}
+                <td>{{ weekDay.openHours.StartTime.format('H:i') }}</td>
+                <td>{{ weekDay.openHours.EndTime.format('H:i') }}</td>
+              {% else %}
+                <td></td>
+                <td></td>
+              {% endif %}
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+   

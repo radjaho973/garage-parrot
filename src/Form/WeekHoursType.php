@@ -11,6 +11,8 @@ use Symfony\Component\Form\Extension\Core\Type\TimeType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\FormView;
+use Symfony\Component\Form\FormInterface;
 
 class WeekHoursType extends AbstractType
 {
@@ -18,15 +20,15 @@ class WeekHoursType extends AbstractType
     {
         $daysOfWeek = ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche'];
 
+        $shortDayNameArray = [];
         foreach ($daysOfWeek as $day) {
             //chaque jour en miniscule avec seulement les 3 première lettres
             $shortDayName = strtolower(substr($day, 0, 3));
+            // insertion du nom tronqué dans un tableau pour le resolver
+            $shortDayNameArray[] = $shortDayName;
 
             $builder
-                ->add($shortDayName.'_day', HiddenType::class, [
-                    'data' => $day,
-                    // 'label' => $day
-                ])
+              
                 ->add($shortDayName.'_start_time', TimeType::class, [
                     'label' => $day." heure d'ouverture",
                 ])
@@ -39,6 +41,19 @@ class WeekHoursType extends AbstractType
                 ]);
         }
         $builder->add("Enregistrer",SubmitType::class);
+    }
+ 
+    public function buildView(FormView $view, FormInterface $form, array $options)
+    {
+        $daysOfWeek = ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche'];
+
+        $shortDayNameArray = [];
+        foreach ($daysOfWeek as $day) {
+            $shortDayName = strtolower(substr($day, 0, 3));
+            // insertion du nom tronqué pour le rendu twig
+            $shortDayNameArray[] = $shortDayName;
+        }
+            $view->vars['short_day_array'] = $shortDayNameArray;
     }
 }
 

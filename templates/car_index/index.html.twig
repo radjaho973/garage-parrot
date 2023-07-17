@@ -3,57 +3,42 @@
 {% block title %}Hello CarIndexController!{% endblock %}
 
 {% block body %}
-<style>
-    .cards-container{
-        width:80vw;
-        height: 90vh;
-        display: flex;
-        justify-content: start;
-        gap: 10px;
-        flex-wrap: wrap;
-    }
-    .card-wrapper{
-        width: 300px;
-        /* height: 400px; */
-        background-color : white;
-        border-radius: 10px;
-    }
-    .card-img > img{
-        width: 300px;
-        height: 276px;
-    }
-</style>
 
- {{ form(form) }}
+<div class="index-container mb-3 row">
 
-<div class="from-wrapper">
-    <form>
-        <label for="search">Champ de recherche</label>
-        <input type="text" name="search" id="search">
-        <button type="button" id="search_btn">Rechercher</button>
-    </form>
-</div>
-<div class="cards-container">
-    {% for car in cars %}
-        <div class="card-wrapper">
-            <div class="card-img">
-                <img src="{{ asset("car_uploads/") ~ car.ImageCollection.Values[0].ImageUrl }}" alt="">
-            </div>
-            <div class="card-text">
-                <div class="card-title">
-                    <p> {{ car.name }} </p>
-                    <p> {{car.brand.brand}} </p>
+    {% form_theme form 'bootstrap_5_layout.html.twig' %}
+    <div class="container m-0 m-2 col-lg-5">
+    {{ form(form) }}
+    </div>
+
+    <div class="cards-container col-lg-6 navbar-nav-scroll d-flex justify-content-center align-items-center flex-wrap gap-2" >
+        {% for car in cars %}
+            <div class="card   p-0 m-0"style="width:250px">
+                <div class=" card-body p-0 " >
+                            {# on affiche le nom du fichier stocké en base de donné 
+                            auquel on fais le lien avec le chemin du dossier 
+                            pour donner le chemin d'accès à l'image  #}
+                        <img class=" w-100 rounded-top " src="{{ asset("car_uploads/") ~ car.ImageCollection.Values[0].ImageUrl }}" alt="">
+                    
+                        <div class="card-info px-2 my-2 d-flex align-items-center gap-3">
+                            <h6 class="card-title m-0 fw-bolder"> {{car.brand.brand}} </h6>
+                            <h6 class="card-subtitle m-0"> {{ car.name }} </h6>
+                        </div>
+                            <p class="card-subtitle px-2 fw-light"> {{ car.category.category}} </p>
+                        <div class="card-info">
+                            <ul class="list-group list-group-flush px-1">
+                                <li class="list-group-item px-0">{{ car.mileage}} Km</li>
+                                <li class="list-group-item px-0">{{ car.price}} €</li>
+                                <li class="list-group-item px-0">{{ car.YearPlacedInCirculation}}</li>
+                            </ul>
+                        </div>
+                        <div class="d-flex justify-content-end">
+                            <a class="btn btn-primary m-2"href=" {{path('app_car_front_display',  {'id': car.id})}} ">Voir +</a>
+                        </div>
                 </div>
-                <div class="card-info">
-                    <p> {{ car.mileage}} </p>
-                    <p> {{ car.price}} </p>
-                    <p> {{ car.YearPlacedInCirculation}} </p>
-                    <p> {{ car.category.category}} </p>
-                </div>
-                <a href=" {{path('app_car_show',  {'id': car.id})}} "><button>+</button></a>
             </div>
-        </div>
-    {% endfor %}
+        {% endfor %}
+    </div>
 </div>
 {% set imagePath = path('app_car_show', {'id' : 1}) %}
 
@@ -92,7 +77,6 @@ function createForm(){
         categoryInput.value,
         brandInput.value
     )
-        console.log(form)
     fetchCars(form)
 }
 //==================
@@ -116,7 +100,7 @@ let originUrl = window.location.origin
         
     }else if (response.ok !== true) {
             throw new Error(`Impossible de contacter le serveur, status : '${response.status}
-            si l\'erreur persiste veuiller vérifier que originUrl(l.72) renvoie bien la bonne url`)
+            si l\'erreur persiste veuiller vérifier que originUrl renvoie bien la bonne url`)
     }else{
             //récupération du contenu json
             let data = await response.json()

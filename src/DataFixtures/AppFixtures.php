@@ -12,17 +12,26 @@ use App\Entity\Services;
 use App\Entity\OpenHours;
 use App\Entity\Testimonials;
 use App\Entity\ImageCollection;
+use DateTime;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class AppFixtures extends Fixture
 {
-    public function load(ObjectManager $manager): void
+    private $userPasswordHasher;
+
+    public function __construct (UserPasswordHasherInterface $userPasswordHasher) 
     {
-       
+        $this->userPasswordHasher = $userPasswordHasher;
+    }
+    
+    public function load(ObjectManager $manager): void
+    {    
         $faker = Factory::create();
+
         //==========MARQUES
+
         $brandArray = ["Peugeot","Citroen","Twingo","BMW","Toyota"];
         for ($i=0; $i < count($brandArray); $i++) {
             $brand = new Brand;
@@ -31,6 +40,7 @@ class AppFixtures extends Fixture
         }
         
         //=========CATEGORIES
+
         $category1 = new Category;
         $category1->setCategory("Essence");
         $manager->persist($category1);
@@ -39,7 +49,9 @@ class AppFixtures extends Fixture
         $manager->persist($category2);
         
         $manager->flush();
+
         //=========VOITURES
+
         $categoryArray = $manager->getRepository(Category::class)->findAll();
         $brandArray = $manager->getRepository(Brand::class)->findAll();
         
@@ -65,12 +77,12 @@ class AppFixtures extends Fixture
                 $car->addImageCollection($images);
                 $manager->persist($images);
             }
-        
             $manager->persist($car);
         }
             
             
             //===========SERVICES
+
             for ($i=0; $i < 4; $i++) { 
                 $service = new Services;
                 $service->setName($faker->word());
@@ -81,6 +93,7 @@ class AppFixtures extends Fixture
             
             
             //===========TEMOIGNAGES
+
             for ($i=0; $i < 5; $i++) { 
                 $testimonial = new Testimonials;
                 $testimonial->setName($faker->firstName());
@@ -94,23 +107,66 @@ class AppFixtures extends Fixture
             
             
             //===========HORAIRES
+
             $dayArray = ['Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi','Dimanche'];
+            $i = 0;
             foreach ($dayArray as $day) {
                 
                 $weekday = new WeekDay;
                 $weekday->setDay($day);
-                
-                $openHours = new OpenHours;
-                $openHours->setStartTime($faker->dateTime());
-                $openHours->setEndTime($faker->dateTime());
-                $openHours->setIsClosed(0);
-                $weekday->setOpenHours($openHours);
+                if($i <= 4){
+                    
+                    $openHours = new OpenHours;
+                    $openHours->setStartTime(new DateTime("07:30:00"));
+                    $openHours->setEndTime(new DateTime("17:30:00"));
+                    $openHours->setIsClosed(false);
+                    $weekday->setOpenHours($openHours);
+                }else{
+                    
+                    $openHours = new OpenHours;
+                    $openHours->setIsClosed(true);
+                    $weekday->setOpenHours($openHours);
+                    // dd($weekday);
+                }
+                $i++;
                 
                 $manager->persist($weekday);
                 $manager->persist($openHours);
             }
-            
 
+
+            
+            //===========UTILISATEURS
+            
+            $motdepasse = "Admin123";
+
+            $user = new User;
+                $user->setName("Vincent");
+                $user->setSurname("Parrot");
+                $user->setEmail("admin@admin.fr");
+                $user->setRoles(["ROLE_ADMIN"]);
+                $user->setPassword(
+                    $this->userPasswordHasher->hashPassword(
+                        $user,
+                        $motdepasse
+                    ));
+                $manager->persist($user);
+
+            for ($i=0; $i < 5; $i++) { 
+                $user = new User;
+                    $user->setName($faker->firstName());
+                    $user->setSurname($faker->lastName());
+                    $user->setEmail($faker->email());
+                    $user->setRoles(["ROLE_EMPLOYEE"]);
+                    $user->setPassword(
+                        $this->userPasswordHasher->hashPassword(
+                            $user,
+                            $motdepasse
+                        )
+                    );
+                $manager->persist($user);
+            }
+            
         $manager->flush();
     }
 }

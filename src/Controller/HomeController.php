@@ -15,7 +15,6 @@ class HomeController extends AbstractController
     public function index(CarRepository $carRepo,ServicesRepository $servicesRepo,TestimonialsRepository $testimonialsRepo): Response
     {
         $latestCars = $carRepo->findBy([],["id"=>"DESC"],5);
-        // dd($latestCars[1]->getImageCollection()->getValues());
         $services = $servicesRepo->findAll();
         
         $testimonials = $testimonialsRepo->getValidatedTestimonials();

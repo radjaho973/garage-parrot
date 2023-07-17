@@ -15,17 +15,37 @@ class ContactType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('title')
-            ->add('name')
-            ->add('surname')
+            ->add('title',options:[
+                'row_attr' => [
+                    'class' => 'col-md-6'
+                ],
+            ])
+            ->add('name',options:[
+                'row_attr' => [
+                    'class' => 'col-md-6'
+                ],
+            ])
+            ->add('surname',options:[
+                'row_attr' => [
+                    'class' => 'col-md-6'
+                ],
+            ])
             ->add('email',EmailType::class,[
+                'row_attr' => [
+                    'class' => 'col-md-6'
+                ],
                 'invalid_message' => 'Veuillez rentrer une adresse email valide'
             ])
             ->add('phone',TelType::class,[
+                'row_attr' => [
+                    'class' => 'col-md-6'
+                ],
                 'invalid_message' => 'Veuillez rentrer un numéro valide'
             ])
             ->add('message',TextareaType::class,[
-                
+                'row_attr' => [
+                    'class' => 'col-md-12'
+                ],
             ])
             ->add('link',HiddenType::class)
         ;

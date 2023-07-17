@@ -12,14 +12,18 @@ class BackOfficePanelController extends AbstractController
     #[Route('/back-office', name: 'app_back_office_employee_panel')]
     public function displayEmployeePanel(): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_EMPLOYEE');
+
         return $this->render('back_office/back_office_panel/employee_panel.html.twig', [
             'controller_name' => 'BackOfficePanelController',
         ]);
     }
 
-    #[Route('/back-office/admin/', name: 'app_back_office_admin_panel')]
+    #[Route('/back-office/admin', name: 'app_back_office_admin_panel')]
     public function displayAdminPanel(UserRepository $userRepo): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+
         return $this->render('back_office/back_office_panel/admin_panel.html.twig', [
             'controller_name' => 'BackOfficePanelController',
             'users' => $userRepo->findAll(),

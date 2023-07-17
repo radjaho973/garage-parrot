@@ -12,12 +12,88 @@
             {{ encore_entry_script_tags('app') }}
         {% endblock %}
     </head>
+<header>
+<nav class="navbar  navbar-expand-lg bg-body-tertiary">
+    <div class="container-fluid">
+            <a class="navbar-brand" href="{{ path("app_home")}}">
+                <img src="{{ asset("logo.png")}}" width="100px" href="{{ path("app_home")}}"  alt="">
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+            </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                <a class="nav-link" href="{{ path("app_home")}}">Acceuil</a>
+                </li>
+                <li class="nav-item">
+                <a class="nav-link" href="{{ path("app_car_index")}}">Voitures</a>
+                </li>
+                <li class="nav-item">
+                <a class="nav-link" href="{{ path("app_display_services")}}">Services</a>
+                </li>
+            </ul>
+            <ul class="navbar-nav">
+                <li class="nav_item">
+                    <a class="btn btn-outline-success m-1" href="{{ path("app_login")}}">Connexion</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+</header>
     <body>
+
         {% block body %}{% endblock %}
+
     </body>
-    <footer>
+    {% block script %}{% endblock %}
     
-        {% block contact_form %}{% endblock %}
+    {% block footer %}
+   
+<footer class="d-flex justify-content-center bg-dark">
+
+<div class="container-fluid row">
+{# show Page est défnini uniquement dans la vue display_car
+    le formulaire ne s'affichera que si l'utilisateur se trouve dessus
+ #}
+    {% if displayPage is defined %}
+        <div class=" col-6">
+            {% block contact_form %}
+            {% endblock %}
+
+    {% else %}
+            </div>
+                <div class=" col-6">
+                    {% block menu %}
+                    <div class=" h-100 d-flex flex-column align-items-center justify-content-center">
+                    <img src="{{ asset("logo.png")}}" >
+                    <ul class="nav">
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ path('app_home') }}">Accueil</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ path('app_car_index') }}">Voitures</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ path('app_display_services') }}">Services</a>
+                        </li>
+                        <li class="nav_item">
+                            <a class="btn btn-outline-success m-1" href="{{ path("app_login")}}">Connexion</a>
+                        </li>
+                    </ul>
+                </div>
+                {% endblock %}
+            
+            {% endif %}
         
-    </footer>
+        </div>
+
+        <div class="container col-6 d-flex align-items-center justify-content-center">
+            {{ render(path('app_schedule')) }}
+        </div>
+</div>
+
+</footer>
+ {% endblock %}
 </html>
