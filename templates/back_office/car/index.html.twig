@@ -1,23 +1,20 @@
-{% extends 'base.html.twig' %}
+{% extends '/back_office/base_back_office.html.twig' %}
 
-{% block title %}Car index{% endblock %}
+{% block title %}Gestion des Voitures{% endblock %}
 
 {% block body %}
-    <h1>Car index</h1>
+<div class="col-6">
+    <h1>Gestion des Voitures</h1>
 
-<ul>
-  {% for item in app.user %}
-    <li>{{ item }}</li>
-  {% endfor %}
-</ul>
+    <a class="btn btn-primary" href="{{ path('app_car_new') }}">Create new</a>
+
 
     <table class="table">
         <thead>
             <tr>
-                <th>Id</th>
                 <th>Name</th>
                 <th>Price</th>
-                <th>YearPlacedInCirculation</th>
+                <th>Année de M. en Circulation</th>
                 <th>Mileage</th>
                 <th>Description</th>
                 <th>actions</th>
@@ -26,7 +23,6 @@
         <tbody>
         {% for car in cars %}
             <tr>
-                <td>{{ car.id }}</td>
                 <td>{{ car.name }}</td>
                 <td>{{ car.price }}</td>
                 <td>{{ car.yearPlacedInCirculation }}</td>
@@ -45,5 +41,5 @@
         </tbody>
     </table>
 
-    <a href="{{ path('app_car_new') }}">Create new</a>
+</div>
 {% endblock %}
