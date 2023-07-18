@@ -1,20 +1,38 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Car{% endblock %}
+{% block title %}{{car.brand.brand}} {{car.name}} {% endblock %}
 
 {% block body %}
     <h1>Car</h1>
 
-<div class="container">
-{% for imageCollection in car.ImageCollection.Values %}
+<div id="carouselExample" class="carousel slide">
+  <div class="carousel-inner">
+
+    <div class="carousel-item ">
+      <img src="..." class="d-block w-100" alt="...">
+    </div>
     
- <img class=" w-50 rounded-top " src="{{ asset("car_uploads/") ~ imageCollection.ImageUrl }}" alt="">
-
-{% endfor %}
-  
+  <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
+    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Previous</span>
+  </button>
+  <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
+    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Next</span>
+  </button>
 </div>
+<div class="display_car_container">
+{% for imageCollection in car.ImageCollection.Values %}
+<div class="container">
+    <div class=" img-slide-custom rounded" style="background : url('{{ asset("car_uploads/") ~ imageCollection.ImageUrl }}')">
+    </div>
+</div>
+{% endfor %}
 
-    <a href="{{ path('app_car_index_ajax') }}">back to list</a>
+
+  
+{# 
+    <a href="{{ path('app_car_index') }}">back to list</a>
 
 <div class="container">
     <h2> {{car.brand.brand}} </h2>
@@ -25,19 +43,22 @@
 
 <div class="container">
     <div class="col-6">
-    <p> {{car.}} </p>
+        <p> {{car.price}} €</p>
+        <p> {{car.mileage}} Km</p>
+        <p> Mise en circulation pour la 1ère fois en : {{car.YearPlacedInCirculation}}</p>
     </div>
+</div> #}
 </div>
 
-                {# <td id="car-name">{{ car.name }}</td> #}
 {% endblock %}
+
 {# Permet d'activer ou non le formulaire dans le footer de la page #}
 {# l'affichage du formulaire dépend si l'utilisateur se trouve sur
 cette vue  #}
 {% set displayPage = 1 %}
  {% block contact_form %}
 
-        {% include "back_office/car/_car_contact_form.html.twig" %}
+        {% include "car_index/_car_contact_form.html.twig" %}
         <script>
         // Script permettant de rajouter le nom et la marque de 
         // la voiture sur le formulaire
@@ -47,4 +68,13 @@ cette vue  #}
         contactTitle.value = carName.innerText
         </script>
 
-    {% endblock %}
+{% endblock %}
+{% block script %}
+<script>
+// Récupère la première slide du carrousel et lui donne
+// la propriété "active" sans quoi il ne fonctionnera pas 
+let innerSlide = document.querySelector(".carousel-inner")
+
+  innerSlide.firstElementChild.classList.add("active")
+</script>
+{% endblock %}

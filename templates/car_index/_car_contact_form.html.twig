@@ -2,11 +2,17 @@
 
 {{ form_start(form) }}
 <div class="row">
-    {{ form_row(form.title, {'value' : app.request.uri})  }}
+    <div class="row my-1">
+        {{ form_row(form.title)}}
+    </div>
+    <div class="row my-2">
     {{ form_row(form.name) }}
     {{ form_row(form.surname) }}
+    </div>
+    <div class="row my-2">
     {{ form_row(form.email) }}
     {{ form_row(form.phone) }}
+    </div>
     {{ form_row(form.message) }}
     {{ form_row(form.link , {'value' : app.request.uri} ) }}
     <button class=" btn text-center my-2 btn-primary">{{ button_label|default('Envoyer') }}</button>

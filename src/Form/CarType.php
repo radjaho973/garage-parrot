@@ -28,22 +28,6 @@ class CarType extends AbstractType
             ->add('Marque',TextType::class,[
                 'mapped'=> false
             ])
-            // ->add('category', CollectionType::class,[
-            //     'entry_type'=> CategoryType::class,
-            //         'by_reference'=> false,
-            //         'allow_add'=> true,
-            //         'allow_delete'=> true,
-            //         'entry_options' => ['label'=>false],
-            //         'prototype'=> true,
-            // ])
-            // ->add('brand', CollectionType::class,[
-            //     'entry_type'=> BrandType::class,
-            //         'by_reference'=> false,
-            //         'allow_add'=> true,
-            //         'allow_delete'=> true,
-            //         'entry_options' => ['label'=>true],
-            //         'prototype'=> true,
-            // ])
             ->add('image_collection', CollectionType::class,[
                 'mapped' => false,
                 'entry_type'=> ImageCollectionType::class,

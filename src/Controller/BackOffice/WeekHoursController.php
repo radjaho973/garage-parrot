@@ -61,7 +61,7 @@ class WeekHoursController extends AbstractController
     #[Route('display-schedule', name: 'app_schedule')]
     public function DisplaySchedule(WeekDayRepository $weekDayRepo, ): Response
     {
-        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+       
 
         $schedule = $weekDayRepo->findAll();
         
