@@ -1,46 +1,55 @@
-{% extends 'base.html.twig' %}
+{% extends '/back_office/base_back_office.html.twig' %}
 
-{% block title %}Testimonials index{% endblock %}
+{% block title %}Gestion des Témoignages{% endblock %}
 
 {% block body %}
-    <h1>Testimonials index</h1>
+<div class="col-9">
+    <h1>Gestion des Témoignages</h1>
 
     <table class="table">
         <thead>
             <tr>
-                <th>Id</th>
-                <th>Name</th>
-                <th>Surname</th>
+                <th>Prénom</th>
+                <th>Nom</th>
                 <th>Message</th>
                 <th>Note</th>
-                <th>Pending_verification</th>
-                <th>Is_validated</th>
+                <th>Vérification en attente</th>
+                <th>Validé</th>
+                <th>Validations</th>
                 <th>actions</th>
             </tr>
         </thead>
         <tbody>
         {% for testimonial in testimonials %}
             <tr>
-                {# <td>{{ testimonial.id }}</td> #}
                 <td>{{ testimonial.name }}</td>
                 <td>{{ testimonial.surname }}</td>
-                <td>{{ testimonial.message }}</td>
+                <td><p>{{ testimonial.message }}</p></td>
                 <td>{{ testimonial.note }}</td>
-                <td>{{ testimonial.pendingVerification ? 'Yes' : 'No' }}</td>
-                <td>{{ testimonial.isValidated ? 'Yes' : 'No' }}</td>
+                <td>{{ testimonial.pendingVerification ? 'Oui' : 'Non' }}</td>
+                <td>{{ testimonial.isValidated ? 'Oui' : 'Non' }}</td>
                 <td>
-                    {# <a href="{{ path('app_testimonials_show', {'id': testimonial.id}) }}">show</a> #}
-                    <a href="{{ path('app_testimonials_edit', {'id': testimonial.id}) }}">edit</a>
+                <div class="d-flex gap-1 justify-content-center align-items_center">
                     {{ include('back_office/testimonials/_validate_form.html.twig') }}                
                     {{ include('back_office/testimonials/_revoke_form.html.twig') }}                
+                </div>
+                    
+                </td>
+                <td>
+                    
+                    <a class="btn btn-primary" href="{{ path('app_testimonials_edit', {'id': testimonial.id}) }}">
+                        <i class="bi bi-pencil"></i>
+                    </a>
+                    
                 </td>
             </tr>
         {% else %}
             <tr>
-                <td colspan="8">no records found</td>
+                <td colspan="8">Pas de Donnée</td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
 
+</div>
 {% endblock %}

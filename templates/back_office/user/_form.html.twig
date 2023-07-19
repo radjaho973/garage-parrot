@@ -1,17 +1,6 @@
+{% form_theme form 'bootstrap_5_layout.html.twig' %}
+
 {{ form_start(form) }}
     {{ form_widget(form) }}
-    <button class="btn">{{ button_label|default('Save') }}</button>
+    <button class="btn btn-success">{{ button_label|default('Enregistrer') }}</button>
 {{ form_end(form) }}
-{# <pre>
-    {{ dump(form) }}
-</pre>
-
-    {{ form_start(form) }}
-     {{ form_row(form.email) }}
-
-     {{ form_row(form.password) }}
-
-     {{ form_row(form.name) }}
-
-     {{ form_row(form.surname) }}
-    {{ form_end(form) }} #}

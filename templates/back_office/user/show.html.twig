@@ -1,15 +1,13 @@
-{% extends 'base.html.twig' %}
+{% extends '/back_office/base_back_office.html.twig' %}
 
-{% block title %}User{% endblock %}
+{% block title %}Utilisateur N°{{ user.id }}{% endblock %}
 
 {% block body %}
+<div class="col-9">
     <h1>User</h1>
-
     <table class="table">
         <tbody>
             <tr>
-                <th>Id</th>
-                <td>{{ user.id }}</td>
             </tr>
             <tr>
                 <th>Email</th>
@@ -34,9 +32,12 @@
         </tbody>
     </table>
 
-    <a href="{{ path('app_user_index') }}">back to list</a>
+    <div class="d-flex flex-align-center" >
+        <a class="btn btn-primary" href="{{ path('app_back_office_admin_panel') }}">Retour</a>
 
-    <a href="{{ path('app_user_edit', {'id': user.id}) }}">edit</a>
+        <a class="btn btn-warning" href="{{ path('app_user_edit', {'id': user.id}) }}">Modifer</a>
 
-    {{ include('back_office/user/_delete_form.html.twig') }}
+        {{ include('back_office/user/_delete_form.html.twig') }}
+    </div>
+</div>
 {% endblock %}

@@ -19,18 +19,7 @@ class ServicesType extends AbstractType
             ->add('picture_src',FileType::class, [
                 'label'=> 'Fichier Image',
                 'mapped'=> false,
-                'required'=> false,
-                'constraints' =>[
-                    new File ([
-                        'maxSize' => '2M',
-                        'extensions' =>[
-                            'webp',
-                            'jpeg',
-                            'png'
-                        ],
-                        'mimeTypesMessage' => 'Veuillez Uploader une image au format webp, jpeg ou png.'
-                    ])
-                ],
+                'required'=> true,
                 
             ])
         ;

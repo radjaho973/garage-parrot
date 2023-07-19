@@ -15,7 +15,9 @@ class TestimonialsType extends AbstractType
             ->add('name')
             ->add('surname')
             ->add('message')
-            ->add('note')
+            ->add('note',options:[
+                'mapped' => false
+            ])
             ->add('pending_verification')
             ->add('is_validated')
         ;

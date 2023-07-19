@@ -1,4 +1,13 @@
+
+{% form_theme form 'bootstrap_5_layout.html.twig' %}
 {{ form_start(form) }}
-    {{ form_widget(form) }}
-    <button class="btn">{{ button_label|default('Save') }}</button>
-{{ form_end(form) }}
+    {{ form_row(form.name) }}
+    {{ form_row(form.surname) }}
+    {{ form_row(form.message) }}
+    {% if app.user is not defined %}
+    {{ form_row(form.note) }}
+    {% endif %}
+    {{ form_widget(form._token) }}
+    <button class="btn btn-success">{{ button_label|default('Enregistrer') }}</button>
+{{ form_end(form,{'render_rest': false}) }}
+

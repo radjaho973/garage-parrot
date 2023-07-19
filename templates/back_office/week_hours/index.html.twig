@@ -1,13 +1,28 @@
-{% extends 'base.html.twig' %}
+{% extends '/back_office/base_back_office.html.twig' %}
 
-{% block title %}Hello WeekHoursController!{% endblock %}
-
+{% block title %}Gestion des Horaires{% endblock %}
+{% set weekHours = 1 %}
 {% block body %}
+<style>
+    body{
+        height: 400px;
+    }
+    .day-wrapper{
+        border-radius: 5px;
+        outline : 1px solid black;
+    }
+</style>
 
+<div class="container col-9 ">
+    <h1>Gestion des horaires</h1>
+    {% form_theme form 'bootstrap_5_layout.html.twig' %}
+
+<div class="container-fluid row">
     {{ form_start(form)}}
+<div class="container-fluid row col-12">
     {% for day in days_of_week %}
         
-        <div class="day-wrapper">
+        <div class="day-wrapper col-md-5 m-2">
             
             <h3>{{day}}</h3>
     {# 
@@ -28,12 +43,14 @@
      {{ form_row(form[form.vars.short_day_array[loop.index0] ~ '_start_time'])}}
      {{ form_row(form[form.vars.short_day_array[loop.index0] ~ '_end_time'])}}
      {{ form_row(form[form.vars.short_day_array[loop.index0] ~ '_closed'])}}
-            
-        
-        </div>
+    </div>
     {% endfor %} 
+</div>
 
-
+    <div class="col-12">
      {{ form_rest(form)}}
+    </div>
+</div>
+
 
 {% endblock %}

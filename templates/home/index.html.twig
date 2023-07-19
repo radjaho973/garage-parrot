@@ -4,34 +4,7 @@
 {% block title %}Garage Parrot{% endblock %}
 
 {% block body %}
- 
-<style>
-.swiper {
-  width: 99vw;
-  height: 300px;
-  background-color : black;
-}
 
-.swiper-slide{
-  background-color : blue;
-  display : flex;
-  flex-direction : column;
-  justify-content: center;
-  align-items: center;
-  gap : 0.5vw;
-}
-
-.swiper-slide>h5{
-  font-size: 20px;
-  text-align: center;
-  margin-block : 10px;
-}
-
-.swiper-slide>p{
-  margin-inline : 5px;
-  margin-block : 0;
-}
-</style>
 <main class="home-container">
 
     <section class="hero-section  text-white text-center">
@@ -91,35 +64,54 @@
   </div>
   {% endfor %}
 </div>
-</section>
+<!-- Button trigger modal -->
+<button type="button" class="btn mt-3 btn-primary" data-bs-toggle="modal" data-bs-target="#modalTestimonial">
+  Contribuer
+</button>
 
+<!-- Modal -->
+<div class="modal fade" id="modalTestimonial" tabindex="-1" aria-labelledby="modalTestimonial" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="modalTestimonial">Ajouter un témoignage</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        {{ render(path('app_testimonials_new')) }}
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+{# {{ asset("car_uploads/") ~ car.ImageCollection.Values[0].ImageUrl }} #}
 
 <section class="cars my-5 mx-3">
     <h2 class="display-2 my-4 text-center ">Nos dernières voitures</h2>
 
-<div id="carCarousel" class="carousel slide">
-    <div class="carousel-inner">
-        
+<div class="container mt-2">
+    <div id="CarouselCar" data-bs-theme="dark" class="carousel slide">
+      <div class="carousel-inner">
         {% for car in latest_cars %}
-          
         <div class="carousel-item">
-                      {# on affiche le nom du fichier stocké en base de donné 
-                        auquel on fais le lien avec le chemin du dossier 
-                        pour donner le chemin d'accès à l'image  #}
-          <img src="{{ asset("car_uploads/") ~ car.ImageCollection.Values[0].ImageUrl }}" class="d-block w-100" alt="...">
+          <img class="rounded h-100 w-100 d-block" src="{{ asset("car_uploads/") ~ car.ImageCollection.Values[0].ImageUrl }}" class="d-block w-100" alt="{{ asset("car_uploads/") ~  car.ImageCollection.Values[0].ImageUrl }}">
         </div>
-       
         {% endfor %}
+      </div>
+      <button class="carousel-control-prev" type="button" data-bs-target="#CarouselCar" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+      </button>
+      <button class="carousel-control-next" type="button" data-bs-target="#CarouselCar" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+      </button>
     </div>
-    <button class="carousel-control-prev" type="button" data-bs-target="#carCarousel" data-bs-slide="prev">
-      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-      <span class="visually-hidden">Previous</span>
-    </button>
-    <button class="carousel-control-next" type="button" data-bs-target="#carCarousel" data-bs-slide="next">
-      <span class="carousel-control-next-icon" aria-hidden="true"></span>
-      <span class="visually-hidden">Next</span>
-    </button>
 </div>
+
 
 </section>
 

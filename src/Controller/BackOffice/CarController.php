@@ -31,32 +31,36 @@ class CarController extends AbstractController
     }
 
     #[Route('/new', name: 'app_car_new', methods: ['GET', 'POST'])]
-    public function new(EntityManagerInterface $em, Request $request, CarRepository $carRepository, SluggerInterface $slugger): Response
+    public function new(EntityManagerInterface $em, Request $request, CarRepository $carRepo, SluggerInterface $slugger): Response
     {
         $this->denyAccessUnlessGranted('ROLE_EMPLOYEE');
 
         $car = new Car();
-
         $form = $this->createForm(CarType::class, $car);
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
-            // correspond à CollectionType dans le formulaire
-            $imageCollection = $form->get('image_collection');
+            $CarName = $form->get('name')->getData();
+            $CarBrand = $form->get('brand')->getData()->getBrand();
             
-            if ($imageCollection) {
-                
-                $CarName = $form->get('name')->getData();
-                //pour chaque ImageCollectionType dans CollectionType
-                //On récupère le FileType de ImageCollectionType
-                foreach ($imageCollection as $imageInput) {
-                    $uploadedImage = $imageInput->get('images')->getData();
+            $imgFileArray = $form->get('images_file_collection');
+            
+            
+            //ici on regarde si l'utilisateur à soumis des images
+            if (!empty($imgFileArray->getData())) {
+                //si oui alors pour chaque fichier on assigne un slug unique
+                //qu'on enregistre dans image_url et on stocke le fichier
+                //dans son dossier respectif
+                foreach ($imgFileArray as $imgFile) {
                     
-                    $originalFileName = pathinfo($CarName, PATHINFO_FILENAME);
-                    // transforme le nom du fichier en slug utilisable
-                    $safeFileName = $slugger->slug($originalFileName);
-                    $newFileName = $safeFileName.'-'.uniqid().'.'.$uploadedImage->guessExtension();
+                    $uploadedImage = $imgFile->getData();
                     
+                    // crée un nom de fichier utilisable
+                    $constructFileName = $CarBrand."-".$CarName;
+                    $safeFileName = $slugger->slug($constructFileName);
+                    $newFileName = $safeFileName.'_'.uniqid().'.'.$uploadedImage->guessExtension();
+                    //ex: Peugeot-206_464648974cgf.jpg
+                    
+                    // on déplace le fichier dans le dossier des voitures
                     try{
                         $uploadedImage->move(
                             //services.yaml sous parameters
@@ -64,41 +68,30 @@ class CarController extends AbstractController
                             $newFileName
                         );
                     }catch (FileException $e){
-                        return new Response(`Une erreur c'est produite durant
-                        l'envoie de fichier`,400 );
+                        return new $e(`Une erreur c'est produite durant
+                        l'envoie de fichier` ,400 );
                     }
                     // ajout du slug à la table image collection
                     // et liaison avec la voiture enregistré 
-                    $imageCollection = new ImageCollection();
+                    $imageCollection = new ImageCollection;
                     $imageCollection->setImageUrl($newFileName);
                     $car->addImageCollection($imageCollection);
-                    
                     $em->persist($imageCollection);
                 }
+            }else{ //si il n'y à pas d'image envoyé
+                $imageCollection = new ImageCollection;
+                    $imageCollection->setImageUrl("car-default.jpg");
+                    $car->addImageCollection($imageCollection);
+                    $em->persist($imageCollection);
             }
-            
-            $categoryName = $form->get('categorie')->getData();
-            // dd($categoryName);
-            $category = new Category();
-            $category->setCategory($categoryName);
-            $car->setCategory($category);
-            
-            $brandName = $form->get('Marque')->getData();
-            
-            $brand = new Brand();
-            $brand->setBrand($brandName);
-            $car->setBrand($brand);
-            
-            $em->persist($category);
-            $em->persist($brand);
-            $em->persist($car);
-            $em->flush();
-            
+
+
+            $carRepo->save($car, true);
 
             return $this->redirectToRoute('back_office_app_car_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->renderForm('back_office/car/new.html.twig', [
+        return $this->render('back_office/car/new.html.twig', [
             'car' => $car,
             'form' => $form,
         ]);
@@ -130,7 +123,7 @@ class CarController extends AbstractController
             return $this->redirectToRoute('back_office_app_car_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->renderForm('back_office/car/edit.html.twig', [
+        return $this->render('back_office/car/edit.html.twig', [
             'car' => $car,
             'form' => $form,
         ]);

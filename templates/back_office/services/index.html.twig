@@ -1,30 +1,32 @@
-{% extends 'base.html.twig' %}
+{% extends '/back_office/base_back_office.html.twig' %}
 
-{% block title %}Services index{% endblock %}
+{% block title %}Gestion des Services{% endblock %}
+
 
 {% block body %}
-    <h1>Services index</h1>
+<div class="col-9">
+    <h1>Gestion des Services</h1>
+
+    <a class="btn btn-primary" href="{{ path('app_services_new') }}">Create new</a>
 
     <table class="table">
         <thead>
             <tr>
-                <th>Id</th>
                 <th>Name</th>
                 <th>Description</th>
-                <th>Picture_src</th>
+                <th>Image source</th>
                 <th>actions</th>
             </tr>
         </thead>
         <tbody>
         {% for service in services %}
             <tr>
-                <td>{{ service.id }}</td>
                 <td>{{ service.name }}</td>
                 <td>{{ service.description }}</td>
-                <td><img style="width: 50px" src="{{ asset('service_uploads/' ~ service.picture_src) }}" alt=""></td>
+                <td><img style="width: 50px" src="{{ asset('service_uploads/' ~ service.picture_src) }}"></td>
                 <td>
-                    <a href="{{ path('app_services_show', {'id': service.id}) }}">show</a>
-                    <a href="{{ path('app_services_edit', {'id': service.id}) }}">edit</a>
+                    <a href="{{ path('app_services_show', {'id': service.id}) }}">Voir</a>
+                    <a href="{{ path('app_services_edit', {'id': service.id}) }}">Modifier</a>
                 </td>
             </tr>
         {% else %}
@@ -35,5 +37,5 @@
         </tbody>
     </table>
 
-    <a href="{{ path('app_services_new') }}">Create new</a>
+</div>
 {% endblock %}

@@ -1,4 +1,9 @@
 <form method="post" action="{{ path('app_testimonials_revoke', {'id': testimonial.id}) }}" onsubmit="return alert('Ce témoignage ne sera plus affiché sur le site mais toujours stocké dans l'application');">
     <input type="hidden" name="_token" value="{{ csrf_token('revoke' ~ testimonial.id) }}">
-    <button class="btn">Enlever</button>
+
+        <button class=" border-0 text-decoration-none bg-danger rounded-circle ">
+            <i class="bi bi-x-circle"></i>
+            {# <i class="bi bi-check2-circle"></i> #}
+        </button>
+    
 </form>

@@ -13,14 +13,16 @@
             {{ encore_entry_script_tags('app') }}
         {% endblock %}
     </head>
+
     <div class="m-0 p-0 container-fluid  row d-flex h-100">
-        <header class="col-3 p-0 h-100">
+
+        <header class="col-3 p-0 ">
             <nav class="h-100  p-3 text-white bg-dark">
             <ul class="nav nav-pills flex-column mb-auto">
 
-                <li class"nav-item">
-                    <a class="nav-link active text-white d-flex gap-3" href="{{ path("app_login_redirect")}}">
-                    <i class="bi bi-house-door-fill" ></i>
+                <li class"nav-item "> 
+                    <a class="nav-link text-white d-flex gap-3" href="{{ path("app_login_redirect")}}">
+                    <i class="bi bi-house-door-fill " ></i>
                     <p class="d-none d-md-block m-0">Acceuil</p>
                     </a>
                 </li>
@@ -39,6 +41,7 @@
                     <p class="d-none d-md-block m-0">Services</p>
                     </a>
                 </li>
+
                 {% endif %}
                 <li class"nav-item">
                     <a class="nav-link text-white d-flex gap-3" href="{{ path("back_office_app_car_index")}}">
@@ -55,6 +58,13 @@
                     <p class="d-none d-md-block m-0">Témoignages</p>
                     </a>
                 </li>
+                <li class"nav-item">
+                    <a class="nav-link text-white d-flex gap-3" href="{{ path("app_brand_index")}}">
+                    <i class="bi bi-award"></i>
+                    <p class="d-none d-md-block m-0">Marques</p>
+                    </a>
+                </li>
+                <a class="btn btn-outline-danger m-1" href="{{ path("app_logout")}}">Déconnexion</a>
             </ul>
             </nav>
         </header>
@@ -62,4 +72,22 @@
             {% block body %}{% endblock %}
         </body>
     </div>
+    {% block active_link_script %}
+    <script>
+    //Permet d'ajouter la classe active aux lien du menu
+    // en fonction de l'url
+    let linkArray = document.querySelectorAll(".nav-link");
+    let currentUrl = window.location.pathname;
+
+    // transforme la NodeList en tableau et itère dessus
+    Array.from(linkArray).forEach(link => {
+
+        let linkUrl = link.getAttribute("href");
+
+        if (linkUrl === currentUrl) {
+            link.classList.add("active");
+        }
+    });
+    </script>
+    {% endblock %}
 </html>

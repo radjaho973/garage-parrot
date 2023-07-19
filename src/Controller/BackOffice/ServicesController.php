@@ -36,12 +36,13 @@ class ServicesController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
             $ImageFile = $form->get('picture_src')->getData();
+            
             if ($ImageFile) {
                     
                     $ServiceName = $form->get('name')->getData();
-                    // $originalFileName = pathinfo($ServiceName, PATHINFO_FILENAME);
-                    // transforme le nom du fichier en slug utilisable
+                    
                     $safeFileName = $slugger->slug($ServiceName);
                     
                     $newFileName = $safeFileName.'-'.uniqid().'.'.$ImageFile->guessExtension();
@@ -55,9 +56,12 @@ class ServicesController extends AbstractController
                         $service->setpicture_src($newFileName);
                         
                     }catch (FileException $e){
-                        return new Response(`Une erreur c'est produite durant
+                        return new $e(`Une erreur c'est produite durant
                         l'envoie de fichier`,400 );
                     }
+                }else{
+                    throw new FileException(`Une erreur c'est produite durant
+                    l'envoie de fichier` ,400);
                 }
                 
                 $servicesRepository->save($service, true);

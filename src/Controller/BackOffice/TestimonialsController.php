@@ -23,25 +23,6 @@ class TestimonialsController extends AbstractController
         ]);
     }
 
-    // #[Route('/new', name: 'app_testimonials_new', methods: ['GET', 'POST'])]
-    // public function new(Request $request, TestimonialsRepository $testimonialsRepository): Response
-    // {
-    //     $testimonial = new Testimonials();
-    //     $form = $this->createForm(TestimonialsType::class, $testimonial);
-    //     $form->handleRequest($request);
-
-    //     if ($form->isSubmitted() && $form->isValid()) {
-    //         $testimonialsRepository->save($testimonial, true);
-
-    //         return $this->redirectToRoute('app_testimonials_index', [], Response::HTTP_SEE_OTHER);
-    //     }
-
-    //     return $this->renderForm('back_office/testimonials/new.html.twig', [
-    //         'testimonial' => $testimonial,
-    //         'form' => $form,
-    //     ]);
-    // }
-
     #[Route('/{id}', name: 'app_testimonials_show', methods: ['GET'])]
     public function show(Testimonials $testimonial): Response
     {

@@ -1,0 +1,12 @@
+{% extends '/back_office/base_back_office.html.twig' %}
+
+{% block title %}Nouvelle Marque{% endblock %}
+
+{% block body %}
+<div class="col-9 ">
+    <h1>Nouvelle Marque</h1>
+
+    {{ include('back_office/brand/_form.html.twig') }}
+
+    <a class="btn btn-dark" href="{{ path('app_brand_index') }}">back to list</a>
+{% endblock %}

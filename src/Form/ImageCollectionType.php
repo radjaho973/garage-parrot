@@ -13,13 +13,13 @@ class ImageCollectionType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $builder->add('images',FileType::class, [
+        $builder->add('ImageUrl',FileType::class, [
             'label'=> 'Fichier Image',
-            'mapped'=> false,
+            'mapped'=> true,
             'required'=> false,
             'constraints' =>[
                 new File ([
-                    'maxSize' => '1024k',
+                    'maxSize' => '2M',
                     'extensions' =>[
                         'webp',
                         'jpeg',

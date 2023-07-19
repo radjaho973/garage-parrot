@@ -1,0 +1,14 @@
+{% extends '/back_office/base_back_office.html.twig' %}
+
+{% block title %}Gestion des Marques{% endblock %}
+
+{% block body %}
+<div class="col-9 ">
+    <h1>Gestion des Marques</h1>
+
+    {{ include('back_office/brand/_form.html.twig', {'button_label': 'Enregistrer'}) }}
+
+    {{ include('back_office/brand/_delete_form.html.twig') }}
+
+    <a class="btn  btn-dark" href="{{ path('app_brand_index') }}">Retour</a>
+{% endblock %}

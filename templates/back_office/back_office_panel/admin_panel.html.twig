@@ -6,21 +6,20 @@
 <div class="col-9 my-5  ">
     <h1>User index</h1>
 
+    <a class="btn btn-primary" href="{{ path('app_user_new') }}">Create new</a>
     <table class="table">
         <thead >
             <tr>
-                <th>Id</th>
                 <th>Email</th>
                 <th>Roles</th>
-                <th>Name</th>
-                <th>Surname</th>
+                <th>Prénom</th>
+                <th>Nom</th>
                 <th>actions</th>
             </tr>
         </thead>
         <tbody class="table-group-divider">
         {% for user in users %}
             <tr>
-                <td>{{ user.id }}</td>
                 <td>{{ user.email }}</td>
                 <td>{{ user.roles ? user.roles|json_encode : '' }}</td>
                 <td>{{ user.name }}</td>
@@ -38,7 +37,6 @@
         </tbody>
     </table>
 
-    {# <a href="{{ path('app_user_new') }}">Create new</a> #}
     {% endif %}
 {% endblock %}
 
