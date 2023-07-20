@@ -1,0 +1,6 @@
+<form method="post" action="{{ path('app_testimonials_validate', {'id': testimonial.id}) }}" onsubmit="return confirm('Êtes vous sur de vouloir afficher ce témoignages sur l'acceuil du site ?');">
+    <input type="hidden" name="_token" value="{{ csrf_token('validate' ~ testimonial.id) }}">
+     <button class=" border-0 text-decoration-none bg-success rounded-circle ">
+            <i class="bi bi-check2-circle"></i>
+        </button>
+</form>

@@ -1,0 +1,41 @@
+{% extends '/back_office/base_back_office.html.twig' %}
+
+{% block title %}Gestion des Services{% endblock %}
+
+
+{% block body %}
+<div class="col-9">
+    <h1>Gestion des Services</h1>
+
+    <a class="btn btn-primary" href="{{ path('app_services_new') }}">Create new</a>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Image source</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for service in services %}
+            <tr>
+                <td>{{ service.name }}</td>
+                <td>{{ service.description }}</td>
+                <td><img style="width: 50px" src="{{ asset('service_uploads/' ~ service.picture_src) }}"></td>
+                <td>
+                    <a href="{{ path('app_services_show', {'id': service.id}) }}">Voir</a>
+                    <a href="{{ path('app_services_edit', {'id': service.id}) }}">Modifier</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="5">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+</div>
+{% endblock %}

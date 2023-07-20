@@ -1,0 +1,33 @@
+{% extends '/back_office/base_back_office.html.twig' %}
+
+{% block title %}Modification Témoignage{% endblock %}
+
+{% block body %}
+    <div class="testimonial-custom-wrapper col-9">
+    <h1>Modification de Témoignage </h1>
+    {{ include('back_office/testimonials/_form.html.twig', {'button_label': 'Enregistrer'}) }}
+
+    {{ include('back_office/testimonials/_delete_form.html.twig') }}
+
+    <a class="my-2 btn btn-dark" href="{{ path('app_testimonials_index') }}">Retour</a>
+<script>
+
+let isValidated = document.querySelector('#testimonials_is_validated');
+let PendingVerif = document.querySelector('#testimonials_pending_verification');
+console.log(isValidated);
+
+isValidated.addEventListener('click', stopError);
+PendingVerif.addEventListener('click', stopError);
+
+function stopError() {
+    console.log("start");
+    
+    if (isValidated.checked && PendingVerif.checked) {
+        console.log("stop");
+        PendingVerif.checked = true;
+        isValidated.checked = false;
+    }
+}
+
+</script>
+{% endblock %}

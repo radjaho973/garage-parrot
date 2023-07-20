@@ -1,0 +1,49 @@
+{% extends '/back_office/base_back_office.html.twig' %}
+
+{% block title %}Voiture N°{{car.id}}{% endblock %}
+
+{% block body %}
+<div class="col-9">
+    <h1>Car</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Name</th>
+                <td id="car-name">{{ car.name }}</td>
+            </tr>
+            <tr>
+                <th>Price</th>
+                <td>{{ car.price }}</td>
+            </tr>
+            <tr>
+                <th>YearPlacedInCirculation</th>
+                <td>{{ car.yearPlacedInCirculation }}</td>
+            </tr>
+            <tr>
+                <th>Mileage</th>
+                <td>{{ car.mileage }}</td>
+            </tr>
+            <tr>
+                <th>Description</th>
+                <td>{{ car.description }}</td>
+            </tr>
+            <tr>
+                <th>Images</th>
+                <td>
+                {% for imageCollection in car.ImageCollection.Values %}
+                        <img style="width: 50px" src="{{ asset("car_uploads/") ~ imageCollection.ImageUrl }}" >
+                {% endfor %}
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <div class="container ">
+        <a class="my-2 btn btn-dark" href="{{ path('app_car_index') }}">Retour</a>
+
+        <a class="btn btn-warning py-2" href="{{ path('app_car_edit', {'id': car.id}) }}">Modifier</a>
+
+        {{ include('back_office/car/_delete_form.html.twig') }}
+    </div>
+</div>
+{% endblock %}

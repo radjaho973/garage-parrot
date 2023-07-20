@@ -1,0 +1,12 @@
+{% extends '/back_office/base_back_office.html.twig' %}
+
+{% block title %}Nouvel Utilisateur{% endblock %}
+
+{% block body %}
+<div class="col-9">
+    <h1>Nouvel Utilisateur</h1>
+
+    {{ include('back_office/user/_form.html.twig') }}
+
+    <a class="my-2 btn btn-dark" href="{{ path('app_back_office_admin_panel') }}">Retour</a>
+{% endblock %}

@@ -1,0 +1,43 @@
+{% extends '/back_office/base_back_office.html.twig' %}
+
+{% block title %}Utilisateur N°{{ user.id }}{% endblock %}
+
+{% block body %}
+<div class="col-9">
+    <h1>User</h1>
+    <table class="table">
+        <tbody>
+            <tr>
+            </tr>
+            <tr>
+                <th>Email</th>
+                <td>{{ user.email }}</td>
+            </tr>
+            <tr>
+                <th>Roles</th>
+                <td>{{ user.roles ? user.roles|json_encode : '' }}</td>
+            </tr>
+            <tr>
+                <th>Password</th>
+                <td>{{ user.password }}</td>
+            </tr>
+            <tr>
+                <th>Name</th>
+                <td>{{ user.name }}</td>
+            </tr>
+            <tr>
+                <th>Surname</th>
+                <td>{{ user.surname }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="d-flex flex-align-center" >
+        <a class="btn btn-primary" href="{{ path('app_back_office_admin_panel') }}">Retour</a>
+
+        <a class="btn btn-warning" href="{{ path('app_user_edit', {'id': user.id}) }}">Modifer</a>
+
+        {{ include('back_office/user/_delete_form.html.twig') }}
+    </div>
+</div>
+{% endblock %}

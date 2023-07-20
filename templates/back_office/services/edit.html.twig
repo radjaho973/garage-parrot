@@ -1,0 +1,17 @@
+{% extends '/back_office/base_back_office.html.twig' %}
+
+{% block title %}Modification de Service{% endblock %}
+
+{% block body %}
+<div class="col-9">
+    <h1>Modification de Service</h1>
+
+
+    {{ include('back_office/services/_form.html.twig') }}
+    <div class="my-2">
+    {{ include('back_office/services/_delete_form.html.twig') }}
+    </div>
+
+    <a class="btn btn-primary"href="{{ path('app_services_index') }}">Retour</a>
+</div>
+{% endblock %}

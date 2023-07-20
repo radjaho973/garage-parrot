@@ -1,0 +1,56 @@
+{% extends '/back_office/base_back_office.html.twig' %}
+
+{% block title %}Gestion des Horaires{% endblock %}
+{% set weekHours = 1 %}
+{% block body %}
+<style>
+    body{
+        height: 400px;
+    }
+    .day-wrapper{
+        border-radius: 5px;
+        outline : 1px solid black;
+    }
+</style>
+
+<div class="container col-9 ">
+    <h1>Gestion des horaires</h1>
+    {% form_theme form 'bootstrap_5_layout.html.twig' %}
+
+<div class="container-fluid row">
+    {{ form_start(form)}}
+<div class="container-fluid row col-12">
+    {% for day in days_of_week %}
+        
+        <div class="day-wrapper col-md-5 m-2">
+            
+            <h3>{{day}}</h3>
+    {# 
+    Pas de panique je vais tout expliquer, la variable commenté 
+    renverra "lun_start_time", 
+    {{ form.vars.short_day_array[0] ~ '_start_time' }} 
+
+    short_day_array est composé du tableau des jours tronqués,
+    passé en variable twig via buildView() dans WeekHoursType.
+
+    pour itérer sur le tableau on ajoute [loop.index0]
+
+    ensuite on concatène la chaine et le résultat est le nom de chaque
+    clé associative référant un champ de WeekHoursType
+    #}
+
+     {# ex : form_row(form["lun_start_time"]) #}
+     {{ form_row(form[form.vars.short_day_array[loop.index0] ~ '_start_time'])}}
+     {{ form_row(form[form.vars.short_day_array[loop.index0] ~ '_end_time'])}}
+     {{ form_row(form[form.vars.short_day_array[loop.index0] ~ '_closed'])}}
+    </div>
+    {% endfor %} 
+</div>
+
+    <div class="col-12">
+     {{ form_rest(form)}}
+    </div>
+</div>
+
+
+{% endblock %}

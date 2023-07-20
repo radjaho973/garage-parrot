@@ -1,0 +1,213 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Recherche Véhicule{% endblock %}
+
+{% block body %}
+
+<div class="index-container container-fluid mb-3 row">
+
+    {% form_theme form 'bootstrap_5_layout.html.twig' %}
+    <div class="container m-0 m-2 col-lg-5">
+    {{ form_start(form) }}
+    <div>
+    {{ form_row(form.year_circulation) }}
+    <div class="d-flex justify-content-between">
+        <p id="minYearValue"></p>
+        <p id="selectedYearValue"></p>
+        <p id="maxYearValue"></p>
+    </div>
+    </div>
+    <div>
+    {{ form_row(form.Prix) }}
+    <div class="d-flex justify-content-between">
+        <p id="minPriceValue"></p>
+        <p id="selectedPriceValue"></p>
+        <p id="maxPriceValue"></p>
+    </div>
+    </div>
+
+    {{ form_end(form) }}
+    </div>
+
+    <div class="cards-container col-lg-6 navbar-nav-scroll d-flex justify-content-center align-items-center flex-wrap gap-2" >
+        {% for car in cars %}
+            <div class="card   p-0 m-0"style="width:250px">
+                <div class=" card-body p-0 " >
+                            {# on affiche le nom du fichier stocké en base de donné auquel on fais le lien avec le chemin du dossier 
+                                                                            pour rendre le chemin d'accès à l'image  #}
+                        <img class=" w-100 rounded-top " src="{{ asset("car_uploads/") ~ car.ImageCollection.Values[0].ImageUrl }}" alt="">
+                    
+                        <div class="card-info px-2 my-2 d-flex align-items-center gap-3">
+                            <h6 class="card-title m-0 fw-bolder"> {{car.brand.brand}} </h6>
+                            <h6 class="card-subtitle text-capitalize m-0"> {{ car.name }} </h6>
+                        </div>
+                            <p class="card-subtitle px-2 fw-light"> {{ car.category.category}} </p>
+                        <div class="card-info">
+                            <ul class="list-group list-group-flush px-1">
+                                <li class="list-group-item px-0">{{ car.mileage}} Km</li>
+                                <li class="list-group-item px-0">{{ car.price}} €</li>      
+                                <li class="list-group-item px-0">{{ car.YearPlacedInCirculation}}</li>
+                            </ul>
+                        </div>
+                        <div class="d-flex justify-content-end">
+                            <a class="btn btn-primary m-2"href=" {{path('app_car_front_display',  {'id': car.id})}} ">Voir +</a>
+                        </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{# Script de selection d'affichage des valeurs des inputs range #}
+<script>
+    let rangeYearInput = document.querySelector('#car_search_year_circulation')
+    let minYearValue = document.querySelector('#minYearValue')
+    let maxYearValue = document.querySelector('#maxYearValue')
+    let selectedYearValue = document.querySelector('#selectedYearValue')
+    
+    let rangePriceInput = document.querySelector('#car_search_Prix')
+    let minPriceValue = document.querySelector('#minPriceValue')
+    let maxPriceValue = document.querySelector('#maxPriceValue')
+    let selectedPriceValue = document.querySelector('#selectedPriceValue')
+
+      // Fonction pour afficher les valeurs
+  function updateValues() {
+    
+    minYearValue.textContent = rangeYearInput.min
+    maxYearValue.textContent = rangeYearInput.max
+    selectedYearValue.textContent = rangeYearInput.value
+
+    minPriceValue.textContent = rangePriceInput.min +"€"
+    maxPriceValue.textContent = rangePriceInput.max +"€"
+    selectedPriceValue.textContent = rangePriceInput.value +"€"
+  }
+
+  // Appeler la fonction lors du chargement de la page
+   updateValues()
+
+  // Écouter les changements de l'input range et mettre à jour les valeurs
+  rangeYearInput.addEventListener('input', updateValues)
+  rangePriceInput.addEventListener('input', updateValues)
+</script>
+
+
+
+
+{% set imagePath = path('app_car_show', {'id' : 1}) %}
+<script>
+
+let cardsContainer = document.querySelector(".cards-container")
+let CarShowUrl = "{{ imagePath }}"
+//==================
+//  FORMULAIRE
+//==================
+
+let searchForm = document.querySelector("#car_search")
+let yearInput = document.querySelector("#car_search_year_circulation")
+let priceInput = document.querySelector("#car_search_Prix")
+let categoryInput = document.querySelector("#car_search_category")
+let brandInput = document.querySelector("#car_search_brand")
+let searchFormBtn = document.querySelector("#car_search_Rechercher")
+
+
+class Form {
+    constructor( yearInput, priceInput, categoryInput,brandInput) {
+       
+        this.yearInput = yearInput;
+        this.priceInput = priceInput;
+        this.categoryInput = categoryInput;
+        this.brandInput = brandInput;
+    }
+}
+
+
+searchFormBtn.addEventListener('click',(createForm))
+
+function createForm(){
+    let form = new Form(
+        yearInput.value,
+        priceInput.value,
+        categoryInput.value,
+        brandInput.value
+    )
+    fetchCars(form)
+}
+//==================
+//  REQUÊTE AJAX
+//==================
+let originUrl = window.location.origin
+
+ async function fetchCars(form) {
+    let response = await fetch(`${originUrl}/car/index/ajax`,{
+        method:'POST',
+        headers : {
+            'X-Requested-With' : 'XMLHttpRequest'
+        },
+        //On transforme le form en object json
+        body:  JSON.stringify(form)
+    })
+    //sécurité implémenté par le composant rate/limit dans le controller
+    if(response.status == 429){
+        alert('Vous avez effectués trop de requêtes')
+            throw new Error('too many requests')
+        
+    }else if (response.ok !== true) {
+            throw new Error(`Impossible de contacter le serveur, status : '${response.status}
+            si l\'erreur persiste veuiller vérifier que originUrl renvoie bien la bonne url`)
+    }else{
+            //récupération du contenu json
+            let data = await response.json()
+            //On éfface les résultat précédent et on affiche les résultat 
+            //de la nouvelle requête
+            cardsContainer.innerHTML = displayResult(data)
+        }
+    }
+
+//==================
+//  AFFICHAGE DES RÉSULTATS
+//==================
+function displayResult(data){
+    eraseResult()
+    let htmlString = ""
+
+    if(data.length == 0){
+        htmlString = `<div class="error-wrapper">
+                        <p>Aucun résultat trouvé<p>
+                    </div>`
+    }else{
+        //pour chaque résultat on crée une carte
+        data.forEach(car => {
+                
+            htmlString += `<div class="card   p-0 m-0"style="width:250px">
+                <div class=" card-body p-0 " >
+                        <img class=" w-100 rounded-top " src="/car_uploads/${car.imageCollection[0].image_url}" alt="">
+                    
+                        <div class="card-info px-2 my-2 d-flex align-items-center gap-3">
+                            <h6 class="card-title m-0 fw-bolder"> ${car.brand.brand} </h6>
+                            <h6 class="card-subtitle text-capitalize m-0"> ${ car.name } </h6>
+                        </div>
+                            <p class="card-subtitle px-2 fw-light"> ${car.category.category} </p>
+                        <div class="card-info">
+                            <ul class="list-group list-group-flush px-1">
+                                <li class="list-group-item px-0">${ car.mileage} Km</li>
+                                <li class="list-group-item px-0">${ car.price} €</li>      
+                                <li class="list-group-item px-0">${ car.yearPlacedInCirculation}</li>
+                            </ul>
+                        </div>
+                        <div class="d-flex justify-content-end">
+                            <a class="btn btn-primary m-2"href=" ${CarShowUrl.slice(0,-2)}/${car.id} ">Voir +</a>
+                        </div>
+                </div>
+            </div>`
+        });
+    }
+        
+    return htmlString
+} 
+function eraseResult(){
+    //tant que le container à des éléments enfants alors on retire le dernier
+    while (cardsContainer.firstChild) {
+        cardsContainer.removeChild(cardsContainer.lastChild)
+    }
+}
+</script>
+{% endblock %}

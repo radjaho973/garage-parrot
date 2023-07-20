@@ -1,0 +1,45 @@
+{% extends '/back_office/base_back_office.html.twig' %}
+
+{% block title %}Gestion des Voitures{% endblock %}
+
+{% block body %}
+<div class="col-9 ">
+    <h1>Gestion des Voitures</h1>
+
+    <a class="btn btn-primary" href="{{ path('app_car_new') }}">Create new</a>
+
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Price</th>
+                <th>Année de M. en Circulation</th>
+                <th>Kilométrage</th>
+                <th>Description</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for car in cars %}
+            <tr>
+                <td>{{ car.name }}</td>
+                <td>{{ car.price }}€</td>
+                <td>{{ car.yearPlacedInCirculation }}</td>
+                <td>{{ car.mileage }}Km</td>
+                <td><p style="width: 200px;" class="text-truncate">{{ car.description }}</p></td>
+                <td>
+                    <a href="{{ path('app_car_show', {'id': car.id}) }}">Voir</a>
+                    <a href="{{ path('app_car_edit', {'id': car.id}) }}">Modifer</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="7">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+</div>
+{% endblock %}
