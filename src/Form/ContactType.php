@@ -52,6 +52,7 @@ class ContactType extends AbstractType
                 'invalid_message' => 'Veuillez rentrer un numéro valide'
             ])
             ->add('message',TextareaType::class,[
+                'required' => false,
                 'label' => false,
                 'attr' => ['placeholder' => 'Message'],
                 'row_attr' => [

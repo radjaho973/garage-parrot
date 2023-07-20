@@ -15,6 +15,7 @@ class ImageCollection
     private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'imageCollection')]
+    #[ORM\JoinColumn(onDelete:"CASCADE")]
     private ?Car $fk_car_id = null;
 
     #[ORM\Column(length: 255)]

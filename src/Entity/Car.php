@@ -51,6 +51,7 @@ class Car
     #[ORM\ManyToOne(inversedBy: 'fk_car_id')]
     #[ORM\JoinColumn(nullable: false)]
     #[Groups("car:object")]
+    #[ORM\JoinColumn(onDelete:"CASCADE")]
     private ?Brand $brand = null;
 
     public function __construct()

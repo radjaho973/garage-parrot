@@ -27,11 +27,10 @@
   <div class="accordion" id="accordionService">
       
       {% for service in services %}
-        {# {{ service.id }} #}
         <div class="accordion-item">
           <h2 class="accordion-header">
             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#{{service.name}}" aria-expanded="false" aria-controls="{{service.name}}">
-              <p>{{service.name}}</p>
+              <p class="text-capitalize lead">{{service.name}}</p>
             </button>
           </h2>
           <div id="{{service.name}}" class="accordion-collapse collapse" data-bs-parent="#accordionService">
@@ -87,7 +86,6 @@
   </div>
 </div>
 </section>
-{# {{ asset("car_uploads/") ~ car.ImageCollection.Values[0].ImageUrl }} #}
 
 <section class="cars my-5 mx-3">
     <h2 class="display-2 my-4 text-center ">Nos dernières voitures</h2>
@@ -116,6 +114,8 @@
 </section>
 
 <section class="about my-5 mx-3 ">
+
+<h2 class="display-2 my-4 text-center ">À Propos</h2>
   <div class="about-wrapper p-3">
 
     <div class="img">

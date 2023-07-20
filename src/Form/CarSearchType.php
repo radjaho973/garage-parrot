@@ -50,13 +50,14 @@ class CarSearchType extends AbstractType
                     'min' => $options['min_price'],
                     'max' => $options['max_price'],
                     'value' => $options['min_price'],
-                    // 'step' => 100
+                    'step' => 100
                 ],
                 'required' => false,
                 'invalid_message' => 'Rentrer un nombre ou un chiffre'
             ])
 
             ->add('category', EntityType::class,[
+                'label' => 'Carburant',
                 'class' => Category::class,
                 'choice_label' => 'category',
                     'multiple' => false,
@@ -64,6 +65,7 @@ class CarSearchType extends AbstractType
                     'placeholder' => 'Toutes Catégories',
             ])
             ->add('brand', EntityType::class,[
+                'label' => 'Marque',
                 'class' => Brand::class,
                 'choice_label' => 'brand',
                     'multiple' => false,
@@ -80,14 +82,13 @@ class CarSearchType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         
-        $getCarMinYear = $this->carRepository->getMinMaxYear()[0];
-        $getCarMinPrice = $this->carRepository->getMinMaxPrice()[0];
-
+        $getCarMinMaxYear = $this->carRepository->getMinMaxYear()[0];
+        $getCarMinMaxPrice = $this->carRepository->getMinMaxPrice()[0];
         $resolver->setDefaults([
-            'min_year' => $getCarMinYear["year_min"],
-            'max_year' => $getCarMinYear["year_max"],
-            'min_price' => $getCarMinPrice["price_min"],
-            'max_price' => $getCarMinPrice["price_max"],
+            'min_year' => $getCarMinMaxYear["year_min"],
+            'max_year' => $getCarMinMaxYear["year_max"],
+            'min_price' => $getCarMinMaxPrice["price_min"],
+            'max_price' => $getCarMinMaxPrice["price_max"],
         ]);
     }
 }

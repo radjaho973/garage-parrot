@@ -1,0 +1,18 @@
+<body>
+    <h1>Nouveau message du formulaire de contact</h1>
+    <p>Bonjour,</p>
+    <p>Vous avez reçu un nouveau message du formulaire de contact sur votre site :</p>
+    
+    <ul>
+        <li><strong>Voiture :</strong> {{ car_name }}</li>
+        <li><strong>Nom de l'utilisateur :</strong> {{ user_name }}</li>
+        <li><strong>Prénom de l'utilisateur :</strong> {{ user_surname }}</li>
+        <li><strong>Email de l'utilisateur :</strong> {{ user_email }}</li>
+        <li><strong>Téléphone de l'utilisateur :</strong> {{ phone }}</li>
+        <li><strong>Message de l'utilisateur :</strong> {{ message }}</li>
+        <li><strong>Lien de la voiture sur le site :</strong> <a href="{{ link }}">{{ link }}</a></li>
+    </ul>
+    
+    <p>Merci de prendre les mesures nécessaires pour répondre à cet utilisateur.</p>
+    <p>Cordialement</p>
+</body>

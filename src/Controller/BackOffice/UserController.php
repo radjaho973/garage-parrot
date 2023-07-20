@@ -57,7 +57,7 @@ class UserController extends AbstractController
 
         return $this->render('back_office/user/show.html.twig', [
             'user' => $user,
-        ]);
+        ]);   
     }
 
     #[Route('/{id}/edit', name: 'app_user_edit', methods: ['GET', 'POST'])]
