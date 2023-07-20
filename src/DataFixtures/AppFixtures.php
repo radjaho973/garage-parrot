@@ -63,7 +63,7 @@ class AppFixtures extends Fixture
             $car->setPrice($faker->randomDigitNot(0)*1000);
             $car->setYearPlacedInCirculation($faker->year());
             $car->setMileage($faker->randomDigitNot(0) * 1000);
-            $car->setDescription($faker->sentence(1, true));
+            $car->setDescription($faker->paragraph(3));
         
             $imagesArray = [
                 "Peugeot-3008-GT-2021__01.jpg",
@@ -138,7 +138,7 @@ class AppFixtures extends Fixture
             
             //===========UTILISATEURS
             
-            $motdepasse = "Admin123";
+            $motdepasse = "LqGGVD@XAY6p^8E&*O)x";
 
             $user = new User;
                 $user->setName("Vincent");
