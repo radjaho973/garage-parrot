@@ -19,8 +19,19 @@ class ServicesType extends AbstractType
             ->add('picture_src',FileType::class, [
                 'label'=> 'Fichier Image',
                 'mapped'=> false,
-                'required'=> true,
-                
+                'required'=> false,
+                'constraints' => [
+                    new File([
+                        'extensions' => [
+                            'jpg',
+                            'png',
+                            'webp',
+                            'jpeg',
+                        ],
+                        'extensionsMessage' =>
+                         'Veuillez téléverser un fichier image valide (jpg/png/webp)'
+                    ])
+                ],
             ])
         ;
     }

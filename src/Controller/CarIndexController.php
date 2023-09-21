@@ -90,9 +90,9 @@ class CarIndexController extends AbstractController
 
             //L'email contient un template twig défini plus bas
             $email = (new TemplatedEmail())
-            ->from('garage-parrot@hotmail.fr')
+            ->from($form->get("email")->getData())
             //On récupère l'email du formulaire
-            ->to($form->get("email")->getData())
+            ->to('garage-parrot@hotmail.fr')
             ->subject('Quelqu\'un est interessé par une de vos voitures')
             ->htmlTemplate('car_index/contact_info.html.twig')
             ->context([
@@ -107,7 +107,7 @@ class CarIndexController extends AbstractController
             ]);
             //on envoi l'email
             $mailer->send($email);
-
+            
         }
         return $this->render('./car_index/display_car.html.twig',[
             'form' => $form,

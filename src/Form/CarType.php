@@ -11,7 +11,6 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Validator\Constraints\File;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
@@ -49,12 +48,26 @@ class CarType extends AbstractType
                 'label' =>false,
                 'mapped' => false,
                 'entry_type'=> FileType::class,
-                    'by_reference'=> false,
-                    'allow_add'=> true,
-                    'allow_delete'=> true,
-                    'empty_data' => null,
-                    'entry_options' => ['label'=>false],
-                    'prototype'=> true,
+                'entry_options' => [
+                    'label'=>false,
+                    'empty_data' => 'car-default.jpg',
+                    'constraints' => [
+                        new File([
+                            'extensions' => [
+                                'jpg',
+                                'png',
+                                'webp',
+                                'jpeg',
+                            ],
+                            'extensionsMessage' =>
+                             'Veuillez téléverser un fichier image valide (jpg/png/webp)'
+                        ])
+                    ],
+                ],
+                'by_reference'=> false,
+                'allow_add'=> true,
+                'allow_delete'=> true,
+                'prototype'=> true,
             ])
             
         ;

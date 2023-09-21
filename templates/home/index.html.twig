@@ -77,7 +77,7 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        {{ render(path('app_testimonials_new')) }}
+        {% include "_new_testimonial.html.twig" %}
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
@@ -85,6 +85,7 @@
     </div>
   </div>
 </div>
+
 </section>
 
 <section class="cars my-5 mx-3">
@@ -159,5 +160,18 @@
 let innerSlide = document.querySelector(".carousel-inner")
 
   innerSlide.firstElementChild.classList.add("active")
+
+
+  //Formulaire Témoignage
+
+  let numberInp = document.querySelector("#user_testimonials_note")
+  let form = document.querySelector("form")
+  addEventListener("submit",(e)=>{
+    console.log(numberInp);
+    if (numberInp.value > 10 || numberInp.value < 0) {
+      e.preventDefault()
+      alert("La note doit être comprise entre 0 et 10")
+    }
+  })
 </script>
 {% endblock %}
